@@ -1,13 +1,14 @@
-# Universal Agent Installer (v28.0.0)
+# Universal Agent Installer (v31.0.0)
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "28.0.0"
+    $VERSION = "31.0.0"
+    $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
     $scriptsDir = "$configDir\scripts"
     $SkillsDir = "$env:USERPROFILE\.agents\skills"
 
-    Write-Host "🤖 Iniciando instalador Universal (v$VERSION)..." -ForegroundColor Cyan
+    Write-Host "[*] Iniciando instalador Universal (v$VERSION)..." -ForegroundColor Cyan
 
     # 1. Preparar directorios
     $dirs = @($scriptsDir, "$SkillsDir\gsap", "$SkillsDir\refero-design", "$SkillsDir\caveman")
@@ -15,33 +16,35 @@ function Install-Agents {
         if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
     }
 
-    # 2. Copiar/Descargar componentes
-    Write-Host "⬇️ Instalando componentes..." -ForegroundColor Yellow
-    # (En un entorno real, aqui se usaria Invoke-WebRequest. Aqui asumimos copia local para este workspace)
+    # 2. Descarga de componentes
+    Write-Host "[>] Descargando componentes desde el repositorio..." -ForegroundColor Yellow
     
-    # 2.1 AGENTE VENDEDOR
-    Write-Host "  - Agente Vendedor: [main.py -> vendedor.py]" -ForegroundColor Gray
-    # Invoke-WebRequest ...
+    # 2.1 AGENTES (Scripts)
+    Invoke-WebRequest -Uri "$REPO_RAW/main.py" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/dev.py" -OutFile "$scriptsDir\dev.py" -UseBasicParsing
+    
+    # 2.2 CONFIG Y PROMPTS
+    Invoke-WebRequest -Uri "$REPO_RAW/opencode.json" -OutFile "$configDir\opencode.json" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_vendedor.txt" -OutFile "$configDir\prompt_vendedor.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_dev.txt" -OutFile "$configDir\prompt_dev.txt" -UseBasicParsing
 
-    # 2.2 AGENTE DEV
-    Write-Host "  - Agente Dev: [dev.py]" -ForegroundColor Gray
-    # Invoke-WebRequest ...
-
-    # 2.3 PROMPTS & SKILLS
-    Write-Host "🎨 Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
-    # Invoke-WebRequest ...
+    # 2.3 SKILLS
+    Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md" -OutFile "$SkillsDir\gsap\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md" -OutFile "$SkillsDir\refero-design\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman/SKILL.md" -OutFile "$SkillsDir\caveman\SKILL.md" -UseBasicParsing
 
     # 3. Dependencias
-    Write-Host "📦 Verificando dependencias..." -ForegroundColor Yellow
+    Write-Host "[>] Verificando dependencias Python..." -ForegroundColor Yellow
     pip install -q duckduckgo_search requests 2>$null
 
-    Write-Host "`n✅ Instalacion Exitosa v$VERSION" -ForegroundColor Green
-    Write-Host "Agente Vendedor: opencode --agent vendedor" -ForegroundColor White
-    Write-Host "Agente Dev: opencode --agent dev" -ForegroundColor White
+    Write-Host "`n[DONE] Instalacion Exitosa v$VERSION" -ForegroundColor Green
+    Write-Host "Agente Vendedor: opencode --agent vendedor"
+    Write-Host "Agente Dev: opencode --agent dev"
 }
 
 try {
     Install-Agents
 } catch {
-    Write-Error "❌ Error: $_"
+    Write-Host "[-] Error: $($_.Exception.Message)" -ForegroundColor Red
 }
