@@ -31,7 +31,7 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "18.0.0"
+VERSION = "19.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
@@ -715,98 +715,135 @@ def deploy_vercel(nombre, html_code, token):
 # ==================================================================
 def generar_html_propuesta(mejor, lider):
     """
-    Generador Elite v18.0 (Injection Skill: Tailwind + Glass + GSAP).
-    Crea una landing page cinematica con animaciones de alto nivel.
+    Generador Elite v19.0 (Injection Skill: BOLD AESTHETIC + GSAP).
+    Sigue las guias de .agents/skills/frontend-design para evitar estetica IA generica.
     """
     nombre = mejor['nombre']
     rating = mejor['gmb']['rating'] or "N/A"
     lider_nombre = lider['nombre']
     
-    # Inyeccion de Skills (GSAP + Tailwind)
+    # Inyeccion de BOLD SKILLS (Syne Font + Mesh + Noise + GSAP)
     html = f"""<!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transformación Digital | {nombre}</title>
-    <!-- ELITE SKILLS: Tailwind, GSAP & Fonts -->
+    <title>{nombre} | Transformación Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        body {{ font-family: 'Inter', sans-serif; overflow-x: hidden; }}
-        .glass {{ background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }}
-        .bg-mesh {{ background-color: #000; background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%); }}
-        .hero-title {{ opacity: 0; transform: translateY(30px); }}
-        .feature-card {{ opacity: 0; transform: scale(0.9); }}
+        :root {{ --bg: #050505; --accent: #3b82f6; }}
+        body {{ font-family: 'Syne', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }}
+        
+        /* Skills: Mesh Background & Noise Texture */
+        .mesh-bg {{ 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-color: hsla(0,0%,0%,1);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        }}
+        .noise {{ 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+            opacity: 0.05; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }}
+
+        .glass-card {{ background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }}
+        .text-huge {{ font-size: clamp(3rem, 12vw, 8rem); line-height: 0.9; letter-spacing: -0.04em; font-weight: 800; }}
+        .animate-reveal {{ opacity: 0; transform: translateY(40px); }}
     </style>
 </head>
-<body class="bg-mesh min-h-screen text-slate-200">
-    <!-- Navbar -->
-    <nav id="nav" class="p-6 flex justify-between items-center max-w-7xl mx-auto opacity-0">
-        <div class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">VISION_WEB</div>
-        <div class="hidden md:flex space-x-8 text-sm font-medium opacity-70">
-            <a href="#" class="hover:text-white transition">Propuesta</a>
-            <a href="#" class="hover:text-white transition">Estrategia</a>
-            <a href="#" class="hover:text-white transition">Contacto</a>
-        </div>
-    </nav>
+<body class="selection:bg-blue-500/30">
+    <div class="mesh-bg"></div>
+    <div class="noise"></div>
 
-    <!-- Main -->
-    <main class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <div class="hero-content">
-            <div class="hero-title inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6">
-                EXCLUSIVO PARA: {nombre.upper()}
-            </div>
-            <h1 class="hero-title text-5xl md:text-7xl font-bold leading-tight mb-6">
-                Domine el mercado de <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">{mejor.get('ciudad', 'su ciudad')}</span>
+    <!-- Header Asimetrico -->
+    <header class="p-8 flex justify-between items-start max-w-[1600px] mx-auto">
+        <div class="text-2xl font-bold tracking-tighter mix-blend-difference">VISION.<span class="text-blue-500">AI</span></div>
+        <div class="glass-card px-6 py-3 text-xs font-bold tracking-widest uppercase opacity-60">Lead ID: SG-{hash(mejor['nombre']) % 10000}</div>
+    </header>
+
+    <main class="max-w-[1600px] mx-auto px-8 py-12">
+        <!-- Hero Section: Bold Typography -->
+        <section class="mb-32">
+            <p class="animate-reveal text-blue-400 font-bold mb-6 tracking-widest uppercase">Diagnóstico Pro para {mejor.get('ciudad', 'su zona')}</p>
+            <h1 class="animate-reveal text-huge mb-12">
+                REDEFINA <br> <span class="text-slate-500 italic uppercase">{mejor['nombre']}</span>
             </h1>
-            <p class="hero-title text-lg text-slate-400 mb-8 max-w-md">
-                Mientras <span class="text-white font-bold">{lider['nombre']}</span> capta clientes con su web, ustedes pierden visibilidad. He creado esta propuesta para revertir la balanza.
-            </p>
-            <div class="hero-title flex flex-col sm:flex-row gap-4">
-                <a href="#" class="px-8 py-4 bg-white text-black hover:bg-slate-200 rounded-xl font-bold text-center transition">
-                    Ver Propuesta Full
-                </a>
+            
+            <div class="grid md:grid-cols-12 gap-12 items-end">
+                <div class="md:col-span-5 animate-reveal">
+                    <p class="text-xl text-slate-400 leading-relaxed mb-10">
+                        Mientras <span class="text-white font-bold tracking-tight">{lider['nombre']}</span> domina con su presencia digital, detectamos que su marca tiene el potencial de superar los ⭐ {lider['rating']} actuales y establecer una nueva hegemonía visual.
+                    </p>
+                    <div class="flex gap-6">
+                        <button class="px-10 py-5 bg-blue-600 rounded-full font-bold hover:scale-105 transition active:scale-95 shadow-2xl shadow-blue-500/20">
+                            INICIAR TRANSFORMACIÓN
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mockup Skill Implementation -->
+                <div class="md:col-span-7 animate-reveal relative">
+                    <div class="glass-card overflow-hidden aspect-video relative group">
+                        <img src="{obtener_mockup_visual(mejor.get('url_web')) or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426'}" 
+                             class="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition duration-1000" alt="UI Mockup">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <span class="text-xs font-bold bg-blue-600 px-3 py-1 rounded mb-2 inline-block">MOCKUP v19.0</span>
+                            <h2 class="text-3xl font-bold">Un Nuevo Estándar Visual</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div class="relative mockup-container opacity-0">
-            <div class="absolute -inset-10 bg-blue-500/20 blur-[100px] rounded-full"></div>
-            <div class="glass p-2 rounded-3xl relative shadow-2xl">
-                <img src="{obtener_mockup_visual(mejor.get('url_web')) or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426'}" 
-                     class="rounded-2xl w-full h-80 object-cover opacity-60" alt="Mockup Visual">
+        <!-- Staggered Stats (GSAP Reference) -->
+        <section class="grid md:grid-cols-4 gap-4">
+            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between">
+                <div class="text-blue-500 font-bold uppercase tracking-widest text-[10px]">Visibilidad Local</div>
+                <div class="text-5xl font-bold font-mono">+{ '310%' if not mejor['tiene_web'] else '120%' }</div>
             </div>
-        </div>
+            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between md:mt-12">
+                <div class="text-emerald-500 font-bold uppercase tracking-widest text-[10px]">Conversión Directa</div>
+                <div class="text-5xl font-bold font-mono">Active</div>
+            </div>
+            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between">
+                <div class="text-purple-500 font-bold uppercase tracking-widest text-[10px]">Benchmark</div>
+                <div class="text-5xl font-bold font-mono">TOP 3</div>
+            </div>
+            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between md:mt-12">
+                <div class="text-orange-500 font-bold uppercase tracking-widest text-[10px]">Auditoría Digital</div>
+                <div class="text-5xl font-bold font-mono italic">PRO</div>
+            </div>
+        </section>
     </main>
 
-    <!-- Features -->
-    <div class="max-w-7xl mx-auto px-6 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="feature-card glass p-8 rounded-2xl">
-                <h3 class="text-emerald-400 font-bold mb-4">SEO Dominante</h3>
-                <p class="text-sm text-slate-400 italic">"Supere a {lider['nombre']} en las búsquedas locales de {mejor.get('ciudad', 'su zona')}."</p>
-            </div>
-            <div class="feature-card glass p-8 rounded-2xl">
-                <h3 class="text-blue-400 font-bold mb-4">Diseño v18.0</h3>
-                <p class="text-sm text-slate-400 italic">"Animaciones cinemáticas GSAP y diseño Glassmorphism de última generación."</p>
-            </div>
-            <div class="feature-card glass p-8 rounded-2xl">
-                <h3 class="text-purple-400 font-bold mb-4">Smart Lead</h3>
-                <p class="text-sm text-slate-400 italic">"Integración directa con sus redes sociales y captura de clientes 24/7."</p>
-            </div>
-        </div>
-    </div>
+    <footer class="p-20 text-center opacity-30 text-[10px] tracking-[0.5em] uppercase border-t border-white/5 mt-32">
+        Derechos Reservados © 2026 - Powered by Find_Create_Web Elite Engine
+    </footer>
 
-    <!-- GSAP Script -->
+    <!-- GSAP Skills Implementation -->
     <script>
         window.addEventListener('load', () => {{
-            const tl = gsap.timeline({{ defaults: {{ ease: "expo.out" }} }});
+            const tl = gsap.timeline({{ defaults: {{ ease: "power4.out", duration: 2 }} }});
             
-            tl.to("#nav", {{ opacity: 1, duration: 1, y: 0 }}, 0.2)
-              .to(".hero-title", {{ opacity: 1, y: 0, duration: 1.5, stagger: 0.2 }}, "-=0.5")
-              .to(".mockup-container", {{ opacity: 1, x: 0, duration: 1.5 }}, "-=1")
-              .to(".feature-card", {{ opacity: 1, scale: 1, duration: 1, stagger: 0.15 }}, "-=1");
+            tl.to(".animate-reveal", {{ 
+                opacity: 1, 
+                y: 0, 
+                stagger: 0.15,
+                ease: "expo.out"
+            }}, 0.5)
+            .from(".stat-card", {{
+                scaleX: 0.5,
+                opacity: 0,
+                duration: 1.5,
+                stagger: 0.1,
+                ease: "elastic.out(1, 0.8)"
+            }}, "-=1");
         }});
     </script>
 </body>
