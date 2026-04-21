@@ -12,6 +12,19 @@
           "*": "ask"
         }
       }
+    },
+    "dev": {
+      "description": "Agente Master Architect para creación de apps innovadoras y validación de ideas.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.5,
+      "prompt": "{file:./prompt_dev.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
