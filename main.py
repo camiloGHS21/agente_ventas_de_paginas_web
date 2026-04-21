@@ -31,53 +31,47 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "23.0.0"
+VERSION = "24.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
 
+# Configuración NICHOS v24.0 (Refero Style)
 NICHE_CONFIG = {
     "RESTAURANTE": {
-        "font": "'Playfair Display', serif",
-        "primary": "#eab308",
-        "topic": "restaurant,luxury,food",
-        "tagline": "gastronomía de clase mundial"
+        "font": "'Playfair Display', serif", "primary": "#eab308",
+        "topic": "restaurant,luxury,food", "tagline": "gastronomía de clase mundial",
+        "soul": "border-left: 4px solid var(--primary); padding-left: 2rem;"
     },
     "GYM": {
-        "font": "'Oswald', sans-serif",
-        "primary": "#ef4444",
-        "topic": "gym,fitness,workout",
-        "tagline": "rendimiento máximo y fitness"
+        "font": "'Oswald', sans-serif", "primary": "#ef4444",
+        "topic": "gym,fitness,workout", "tagline": "rendimiento máximo y fitness",
+        "soul": "text-shadow: 0 0 20px rgba(239, 68, 68, 0.3); letter-spacing: 0.1em;"
     },
     "SPA": {
-        "font": "'Montserrat', sans-serif",
-        "primary": "#f472b6",
-        "topic": "spa,wellness,beauty",
-        "tagline": "bienestar y cuidado personal"
+        "font": "'Montserrat', sans-serif", "primary": "#f472b6",
+        "topic": "spa,wellness,beauty", "tagline": "bienestar y cuidado personal",
+        "soul": "border-radius: 4rem 1rem; overflow: hidden;"
     },
     "TECH": {
-        "font": "'Syne', sans-serif",
-        "primary": "#3b82f6",
-        "topic": "tech,digital,modern",
-        "tagline": "innovación y transformación digital"
+        "font": "'Syne', sans-serif", "primary": "#3b82f6",
+        "topic": "tech,digital,modern", "tagline": "innovación y transformación digital",
+        "soul": "background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);"
     },
     "PROFESSIONAL": {
-        "font": "'EB Garamond', serif",
-        "primary": "#1e3a8a",
-        "topic": "office,corporate,law",
-        "tagline": "excelencia y consultoría estratégica"
+        "font": "'EB Garamond', serif", "primary": "#1e3a8a",
+        "topic": "office,corporate,law", "tagline": "excelencia y consultoría estratégica",
+        "soul": "border-top: 1px solid rgba(255,255,255,0.1); padding-top: 3rem;"
     },
     "MEDICAL": {
-        "font": "'Inter', sans-serif",
-        "primary": "#0ea5e9",
-        "topic": "medical,health,clinic",
-        "tagline": "salud y atención especializada"
+        "font": "'Inter', sans-serif", "primary": "#0ea5e9",
+        "topic": "medical,health,clinic", "tagline": "salud y atención especializada",
+        "soul": "box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(14, 165, 233, 0.1);"
     },
     "GENERAL": {
-        "font": "'Inter', sans-serif",
-        "primary": "#a8a29e",
-        "topic": "business,modern",
-        "tagline": "excelencia y liderazgo empresarial"
+        "font": "'Inter', sans-serif", "primary": "#a8a29e",
+        "topic": "business,modern", "tagline": "excelencia y liderazgo empresarial",
+        "soul": "border-bottom: 2px solid var(--primary); width: fit-content;"
     }
 }
 
@@ -776,42 +770,63 @@ def detectar_nicho(lead):
     return "GENERAL"
 
 def generar_css_premium(nicho):
-    """Genera un framework de CSS Vanilla Responsivo basado en el nicho."""
+    """Genera un framework de CSS Vanilla Responsivo (Refero.design Style)."""
     conf = NICHE_CONFIG.get(nicho, NICHE_CONFIG["GENERAL"])
     fonts = conf["font"]
     primary = conf["primary"]
+    soul = conf["soul"]
     
     return f"""
 :root {{
-  --primary: {primary}; --bg: #0c0a09; --text: #fafaf9; --card-bg: rgba(28, 25, 23, 0.7);
-  --font-main: {fonts}; --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  --primary: {primary}; --bg: #0c0a09; --text: #fafaf9; --card-bg: rgba(23, 21, 20, 0.8);
+  --font-main: {fonts}; --transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  --tracking-tight: -0.02em; --tracking-wide: 0.05em; --tracking-caps: 0.1em;
 }}
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-body {{ background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }}
-h1, h2, h3 {{ font-family: var(--font-main); text-transform: uppercase; letter-spacing: 0.1em; }}
-img {{ max-width: 100%; height: auto; border-radius: 1rem; }}
-.container {{ max-width: 1200px; margin: 0 auto; padding: 0 2rem; }}
+body {{ background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; line-height: 1.6; -webkit-font-smoothing: antialiased; }}
+
+/* TYPOGRAPHY CRAFT (Refero Principles) */
+h1, h2, h3 {{ 
+  font-family: var(--font-main); 
+  letter-spacing: var(--tracking-tight); 
+  line-height: 1.1;
+  text-transform: uppercase;
+}}
+.caps {{ text-transform: uppercase; letter-spacing: var(--tracking-caps); font-weight: 800; font-size: 0.75rem; color: var(--primary); }}
+.small {{ font-size: 0.85rem; opacity: 0.6; letter-spacing: var(--tracking-wide); }}
+
+img {{ max-width: 100%; height: auto; border-radius: 1.5rem; transition: var(--transition); }}
+img:hover {{ filter: brightness(1.1); transform: scale(1.02); }}
+.container {{ max-width: 1300px; margin: 0 auto; padding: 0 2.5rem; }}
 
 /* NAVIGATION */
-nav {{ position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; backdrop-filter: blur(10px); background: rgba(0,0,0,0.5); }}
+nav {{ position: fixed; top: 0; width: 100%; padding: 2rem 0; z-index: 1000; backdrop-filter: blur(20px); background: rgba(12,10,9,0.4); border-bottom: 1px solid rgba(255,255,255,0.03); }}
 nav .content {{ display: flex; justify-content: space-between; align-items: center; }}
-nav .links {{ display: flex; gap: 2rem; }}
-nav a {{ color: var(--text); text-decoration: none; font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; transition: var(--transition); }}
-nav a:hover {{ color: var(--primary); }}
+nav .links {{ display: flex; gap: 3rem; }}
+nav a {{ color: var(--text); text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: var(--tracking-caps); transition: var(--transition); opacity: 0.6; }}
+nav a:hover {{ opacity: 1; color: var(--primary); }}
 
-/* HERO SYSTEM - RESPONSIVE */
-.hero {{ min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; }}
-.hero h1 {{ font-size: clamp(2.5rem, 8vw, 6rem); line-height: 1; margin-bottom: 2rem; }}
-.hero p {{ font-size: 1.2rem; opacity: 0.7; max-width: 600px; }}
+/* HERO SYSTEM - ANTI-AI SLOP */
+.hero {{ min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10rem 2rem 6rem; position: relative; }}
+.hero h1 {{ font-size: clamp(3rem, 10vw, 8rem); margin-bottom: 2.5rem; font-weight: 900; }}
+.hero p {{ font-size: 1.25rem; opacity: 0.7; max-width: 700px; line-height: 1.8; }}
 
-/* GRID SYSTEM */
-.grid-auto {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 4rem 0; }}
-.card {{ background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); text-align: center; }}
-.card:hover {{ transform: translateY(-10px); border-color: var(--primary); }}
+/* THE SOUL (Bespoke Niche Element) */
+.soul-box {{ {soul} }}
+
+/* GRID & CRAFT */
+.grid-auto {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; padding: 6rem 0; }}
+.card {{ 
+    background: var(--card-bg); padding: 3.5rem; border-radius: 2rem; 
+    border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); 
+    display: flex; flex-direction: column; gap: 1.5rem;
+}}
+.card:hover {{ border-color: var(--primary); transform: translateY(-12px); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }}
 
 @media (max-width: 768px) {{
   nav .links {{ display: none; }} 
-  .hero {{ text-align: left; align-items: flex-start; }}
+  .hero {{ text-align: left; align-items: flex-start; padding: 8rem 1.5rem 4rem; }}
+  .hero h1 {{ font-size: 3.5rem; }}
   .container {{ padding: 0 1.5rem; }}
 }}
 """
@@ -880,16 +895,19 @@ import React, {{ useEffect }} from 'react';
 
 export default function Home() {{
   useEffect(() => {{
-    gsap.from(".hero-content *", {{ opacity: 0, y: 100, duration: 1.5, stagger: 0.2, ease: "expo.out" }});
+    gsap.from(".hero-content > *", {{ opacity: 0, y: 80, duration: 2, stagger: 0.2, ease: "expo.out" }});
+    gsap.from(".soul-box", {{ scaleX: 0, duration: 1.5, delay: 1, ease: "power4.out", transformOrigin: "left" }});
   }}, []);
 
   return (
     <div className="hero">
       <div className="container hero-content">
-        <p style={{{{ color: 'var(--primary)', fontWeight: 'bold' }}}}>Elite Proposal v23.0</p>
-        <h1>REDEFINIENDO <br/> <span style={{{{ color: 'var(--primary)' }}}}>{mejor['nombre']}</span></h1>
-        <p>Expertos en {conf['tagline']} en {mejor.get('ciudad', 'su zona')}.</p>
-        <img src="{img_hero}" style={{{{ marginTop: '4rem', width: '100%', maxHeight: '600px', objectFit: 'cover' }}}} />
+        <p className="caps" style={{{{ marginBottom: '1.5rem' }}}}>Refero Craft v24.0</p>
+        <h1 className="animate-reveal">REDEFINIENDO <br/> <span style={{{{ color: 'var(--primary)' }}}}>{mejor['nombre']}</span></h1>
+        <div className="soul-box" style={{{{ marginBottom: '2rem' }}}}>
+            <p className="small">Expertos en {conf['tagline']} en {mejor.get('ciudad', 'su zona')}.</p>
+        </div>
+        <img src="{img_hero}" style={{{{ marginTop: '2rem', width: '100%', maxHeight: '600px', objectFit: 'cover' }}}} />
       </div>
     </div>
   );
@@ -1223,9 +1241,9 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # Generar Activos Dinamicos (v23.0: Universal Niche Engine)
+            # Generar Activos Dinamicos (v24.0: Refero Master Engine)
             nicho = detectar_nicho(mejor)
-            print(f"\n🎨 Creando propuesta Multi-Page React Pro para {mejor['nombre']} ({nicho})...")
+            print(f"\n💎 Aplicando Refero Design para {mejor['nombre']} ({nicho})...")
             base_path = scaffold_react_project(mejor, lider)
             guardar_propuesta(base_path)
             
