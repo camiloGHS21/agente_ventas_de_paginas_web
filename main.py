@@ -31,7 +31,7 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "12.0.0"
+VERSION = "13.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 RESULTADOS_DIR = "resultados_osint"

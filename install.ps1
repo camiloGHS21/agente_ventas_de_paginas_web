@@ -1,3 +1,14 @@
+# 0. Configuracion de descarga remota (v13.0.0)
+$REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
+$requiredFiles = @("main.py", "opencode.json", "prompt_vendedor.txt", "requirements.txt")
+
+foreach ($file in $requiredFiles) {
+    if (-not (Test-Path "$PSScriptRoot\$file")) {
+        Write-Host "â¬ï¸ Descargando $file desde GitHub..."
+        Invoke-WebRequest -Uri "$REPO_RAW/$file" -OutFile "$PSScriptRoot\$file" -UseBasicParsing
+    }
+}
+
 $configDir = "$env:USERPROFILE\.config\opencode"
 $scriptsDir = "$configDir\scripts"
 

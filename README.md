@@ -25,7 +25,25 @@ Vendedor-IA es un agente autónomo que busca negocios locales que **no tienen p�
 - **OpenCode CLI** (para modo agente nativo)
 - **pip** (gestor de paquetes Python)
 
-## 🚀 Instalación
+## 🚀 Instalación Rápida (Sin Clonar)
+
+Si no quieres descargar todo el repositorio, puedes instalar el agente directamente con una sola línea de comando. Esto descargará automáticamente todos los archivos necesarios y los configurará en tu sistema.
+
+### Windows (PowerShell)
+Ejecuta esto en tu terminal de PowerShell:
+```powershell
+powershell -ExecutionPolicy Bypass -Command "Invoke-RestMethod https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.ps1 | Invoke-Expression"
+```
+
+### Linux / macOS / Amazon EC2
+Ejecuta esto en tu terminal:
+```bash
+curl -sSL https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.sh | bash
+```
+
+---
+
+## 🔧 Instalación Manual
 
 ### Windows (PowerShell)
 

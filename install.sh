@@ -1,9 +1,21 @@
 #!/bin/bash
 set -e
 
+# 0. Configuracion de descarga remota (v13.0.0)
+REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
+REQUIRED_FILES=("main.py" "opencode.json" "prompt_vendedor.txt" "requirements.txt")
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+for file in "${REQUIRED_FILES[@]}"; do
+    if [ ! -f "$SCRIPT_DIR/$file" ]; then
+        echo "â¬‡ï¸  Descargando $file desde GitHub..."
+        curl -sSL "$REPO_RAW/$file" -o "$SCRIPT_DIR/$file"
+    fi
+done
+
 CONFIG_DIR="$HOME/.config/opencode"
 SCRIPTS_DIR="$CONFIG_DIR/scripts"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "🤖 Instalando Vendedor-IA (v12.5.0)..."
 
