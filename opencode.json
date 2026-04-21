@@ -1,7 +1,7 @@
 {
   "agent": {
-    "vendedor-ia": {
-      "description": "Agente autónomo que prospecta en OSM, genera Landing Pages y envía correos fríos.",
+    "find_create_web": {
+      "description": "Agente autonomo que prospecta en OSM, genera Landing Pages y envía correos fríos.",
       "mode": "primary",
       "model": "gemini-3.0-flash-preview",
       "temperature": 0.5,

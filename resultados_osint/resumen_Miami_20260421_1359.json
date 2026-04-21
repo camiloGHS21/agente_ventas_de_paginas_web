@@ -1,0 +1,98 @@
+[
+  {
+    "nombre": "Estiatorio Milos Miami",
+    "tiene_web": false,
+    "dominio_web": null,
+    "url_web": null,
+    "redes_sociales": [],
+    "emails": [],
+    "telefonos": [],
+    "contexto": [],
+    "resenas": [],
+    "handles_sociales": [],
+    "puntuacion_lead": 80,
+    "gmb": {
+      "rating": null,
+      "quejas": []
+    },
+    "salud_social": "Desconocida"
+  },
+  {
+    "nombre": "Shelter Restaurant - Miami",
+    "tiene_web": false,
+    "dominio_web": null,
+    "url_web": null,
+    "redes_sociales": [],
+    "emails": [],
+    "telefonos": [],
+    "contexto": [
+      "虚拟隔离APP功能类似于Sandbox,但是没有Sandbox隔离效果彻底;安卓沙盘通常依赖Android for Work,是为了方便工作设计出来的. Android for Work是Android自带的虚拟隔离APP组件. 第三方沙盘组件:  …",
+      "Aug 14, 2023 · 市面上 应用分身很多，好用的真没几个。而且主程序要在后台运行，安卓经常会杀掉导致某信、某Q收不到消息。 加入白名单耗电不说，最担心的是隐私收集。 今天分享一款 ...",
+      "Apr 23, 2025 · Shelter中文版，这款开源的隐私隔离神器，在GitHub上备受瞩目。它巧妙地利用了Android 7.0内置的工作档案功能，让您的应用从此拥有专属的私密空间。只需简单操作，Shelter ...",
+      "Shelter from the storm 躲开风暴 'Twas in another lifetime, one of toil and blood When blackness was a virtue and the road was full of mud I came in from the wilderness, a creature void of form. \"Come in,\" …",
+      "Shelter并非意味着密不透风的硬壳，而是为了达到破茧成蝶的最佳容器。 整个故事感人而又不落于俗套，全篇2D与3D的融洽度令人惊叹，欧美EDM与日系ACG的绝妙结合也让大家眼前一亮，在MV结尾 …",
+      "Apr 11, 2025 · 有啥安卓软件可以分身软件，并且虚拟环境？"
+    ],
+    "resenas": [],
+    "handles_sociales": [],
+    "puntuacion_lead": 80,
+    "gmb": {
+      "rating": null,
+      "quejas": []
+    },
+    "salud_social": "Desconocida"
+  },
+  {
+    "nombre": "Fiola Miami",
+    "tiene_web": false,
+    "dominio_web": null,
+    "url_web": null,
+    "redes_sociales": [],
+    "emails": [],
+    "telefonos": [],
+    "contexto": [],
+    "resenas": [],
+    "handles_sociales": [],
+    "puntuacion_lead": 80,
+    "gmb": {
+      "rating": null,
+      "quejas": []
+    },
+    "salud_social": "Desconocida"
+  },
+  {
+    "nombre": "Miami-Havana Restaurant",
+    "tiene_web": true,
+    "dominio_web": "havana1957.com",
+    "url_web": "https://www.havana1957.com/locations/espanola-way",
+    "redes_sociales": [],
+    "emails": [
+      "hello@havana1957.com"
+    ],
+    "telefonos": [
+      "3055033828"
+    ],
+    "contexto": [
+      "Experience the glamour of 1950's Cuba with authentic Cuban cuisine, festive cocktails and live music across our Miami and Las Vegas locations.",
+      "Dec 22, 2007 · The hay ring post below got me to think what folks do as far as moving hay rings through the winter or just leave …",
+      "Mar 8, 2014 · Anyone ever made homemade poly hay rings . Former student is giving me a pretty good size coil of 3-4 inch poly …",
+      "Please contact us using the form below. FETEN GROUP CORPORATION DBA Habana Vieja Restaurant is committed to ensuring that the collection and processing of data carried out by our …Cuban Restaurant, Coral Gables, FETEN GROUP CORPORATION DBA Habana …Habana Vieja Restaurant has been family owned since ",
+      "Jan 18, 2008 · Is anybody unrolling hay into rings or some type of bunk? I’m curious if that would reduce waste more than just …",
+      "Located on Washington Ave, Miami Beach, Havana Vieja brings the charm of old Cuban style to life. With vintage décor, vibrant energy, and an inviting open-air space, it's the perfect spot to enjoy traditional Cuban flavors. From music to mojitos, every detail reflects the soul of Havana.",
+      "May 4, 2011 · Do you use a hay ring? If so, which do you prefer? Are the heavy duty plastic rings that cost a hundred bucks …",
+      "Jan 1, 2017 · Habana Vieja Restaurant, Miami: See 134 unbiased reviews of Habana Vieja Restaurant, rated 4.0 of 5 on Tripadvisor and ranked #323 of 2,686 restaurants in Miami.",
+      "Aug 9, 2024 · Telogen effluvium is a form of hair loss that involves hair thinning or increased hair shedding. It occurs more often in women and is usually due to a disturbance in the hair cycle.",
+      "What is telogen effluvium? Telogen effluvium is the name for a common cause of temporary hair loss due to the excessive shedding of resting or telogen hair after some shock to the system. New hair …"
+    ],
+    "resenas": [],
+    "handles_sociales": [],
+    "puntuacion_lead": 30,
+    "gmb": {
+      "rating": null,
+      "quejas": []
+    },
+    "salud_social": "Desconocida",
+    "expiracion_dominio": "2027-02-04",
+    "visual_mockup": "https://image.thum.io/get/width/1024/crop/800/https://www.havana1957.com/locations/espanola-way"
+  }
+]

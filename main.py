@@ -31,7 +31,7 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "11.1.0"
+VERSION = "12.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 RESULTADOS_DIR = "resultados_osint"
@@ -568,6 +568,15 @@ def extraer_osint(nombre_negocio, direccion="", discovery_emails=None, discovery
                     osint["url_web"] = url
                     urls_a_scrapear.append(url)
 
+            # Extraer contactos de Bios Sociales (Deep Harvesting v12.0)
+            if "instagram" in url or "facebook" in url:
+                bio_matches = RE_PHONE.findall(texto_completo)
+                for bio_tel in bio_matches:
+                    bt = re.sub(r'[^\d+]', '', bio_tel)
+                    if 7 <= len(bt) <= 15: 
+                        osint["telefonos"].add(bt)
+                        osint["contexto"].append(f"Detectado en Bio: {bt}")
+
             if snippet: osint["contexto"].append(snippet[:300])
 
     # --- CAPA 6: Salud Social (Validar Instagram/FB) ---
@@ -595,6 +604,17 @@ def extraer_osint(nombre_negocio, direccion="", discovery_emails=None, discovery
             if tt > 4.5:
                 osint["contexto"].append(f"Web extremadamente lenta ({tt:.1f}s), oportunidad.")
                 osint["puntuacion_lead"] += 10 # Bonus por lentitud
+
+    # ============================================================
+    # CAPA 3: INTELIGENCIA DE DOMINIO Y VISUAL (v12.0 Elite)
+    # ============================================================
+    if osint["tiene_web"] and osint["dominio_web"]:
+        osint["expiracion_dominio"] = obtener_vencimiento_dominio(osint["dominio_web"])
+        osint["visual_mockup"] = obtener_mockup_visual(osint["url_web"])
+        if osint["expiracion_dominio"] and osint["expiracion_dominio"] != "Desconocido":
+            # Si expira en menos de 6 meses, subir score
+            osint["puntuacion_lead"] += 15
+            osint["contexto"].append(f"ALERTA: Dominio expira pronto ({osint['expiracion_dominio']})")
 
     # ============================================================
     # FINAL: ANALISIS DE PUNTOS DE DOLOR Y SCORING
