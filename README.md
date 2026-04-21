@@ -32,7 +32,8 @@ Si no quieres descargar todo el repositorio, puedes instalar el agente directame
 ### Windows (PowerShell)
 Ejecuta esto en tu terminal de PowerShell:
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "Invoke-RestMethod https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.ps1 | Invoke-Expression"
+powershell -ExecutionPolicy Bypass -Command "Invoke-RestMethod https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.ps1?v=102 | Invoke-Expression"
+
 ```
 
 ### Linux / macOS / Amazon EC2
