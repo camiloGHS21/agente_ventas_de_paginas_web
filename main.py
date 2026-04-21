@@ -31,9 +31,10 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "15.0.0"
+VERSION = "16.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+PROPUESTAS_DIR = "lead_sites"
 
 # Regex compilados para rendimiento
 RE_EMAIL = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
@@ -710,7 +711,75 @@ def deploy_vercel(nombre, html_code, token):
     return None
 
 # ==================================================================
-# MODULO 5: EVALUADOR DE LEADS
+# MODULO 5: GENERADOR DE PAGINAS (v16.0.0)
+# ==================================================================
+def generar_html_propuesta(mejor, lider):
+    """Genera una landing page moderna y persuasiva para el lead."""
+    nombre = mejor['nombre']
+    rating = mejor['gmb']['rating'] or "N/A"
+    lider_nombre = lider['nombre']
+    
+    html = f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Web para {nombre}</title>
+    <style>
+        :root {{ --primary: #2563eb; --dark: #1e293b; --text: #f8fafc; }}
+        body {{ font-family: 'Inter', sans-serif; background: #0f172a; color: var(--text); margin: 0; padding: 2rem; }}
+        .card {{ background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid #334155; border-radius: 1rem; padding: 2rem; max-width: 800px; margin: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }}
+        h1 {{ color: #60a5fa; font-size: 2.5rem; margin-bottom: 0.5rem; }}
+        .score {{ font-size: 1.5rem; color: #34d399; font-weight: bold; }}
+        .comparison {{ display: flex; gap: 2rem; margin-top: 2rem; }}
+        .comp-item {{ flex: 1; padding: 1rem; border-radius: 0.5rem; background: #1e293b; border: 1px solid #475569; }}
+        .btn {{ display: inline-block; background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; margin-top: 1.5rem; font-weight: bold; }}
+        .highlight {{ color: #fbbf24; }}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>{nombre}</h1>
+        <p class="score">Diagnóstico: Oportunidad de Crecimiento Prioritaria</p>
+        <p>Analizamos su presencia digital y detectamos que <span class="highlight">{'no poseen un sitio web oficial' if not mejor['tiene_web'] else 'su sitio actual es vulnerable'}.</span></p>
+        
+        <div class="comparison">
+            <div class="comp-item">
+                <p><strong>Ustedes:</strong></p>
+                <p>Rating: ⭐ {rating}</p>
+                <p>Visibilidad: Limitada</p>
+            </div>
+            <div class="comp-item">
+                <p><strong>Competencia ({lider_nombre}):</strong></p>
+                <p>Rating: ⭐ {lider['rating']}</p>
+                <p>Visibilidad: Dominante</p>
+            </div>
+        </div>
+
+        <h3>Propuesta de Transformación:</h3>
+        <ul>
+            <li>Diseño Responsivo (Móvil + PC)</li>
+            <li>Optimización de SEO para dominar {lider_nombre}</li>
+            <li>Botón Directo a WhatsApp / Reservas</li>
+        </ul>
+
+        <a href="#" class="btn">Activar Sitio Ahora</a>
+    </div>
+</body>
+</html>"""
+    return html
+
+def guardar_propuesta(nombre, html):
+    """Guarda la propuesta HTML en la carpeta lead_sites."""
+    os.makedirs(PROPUESTAS_DIR, exist_ok=True)
+    slug = re.sub(r'[^a-z0-9]', '', nombre.lower().replace(' ', '-'))
+    path = os.path.join(PROPUESTAS_DIR, f"{slug}.html")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+    return path
+
+# ==================================================================
+# MODULO 6: EVALUADOR DE LEADS
 # ==================================================================
 def evaluar_lead(negocio, args):
     nombre = negocio['name']
@@ -926,7 +995,12 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # 5. Pitch Psicologico Final
+            # --- GENERACION DE PROPUESTA ACTIVA (v16.0) ---
+            html_propuesta = generar_html_propuesta(mejor, lider)
+            path_propuesta = guardar_propuesta(mejor['nombre'], html_propuesta)
+            print(f"  [+] PROPUESTA GENERADA: {path_propuesta}")
+            
+            # --- PITCH DE VENTA SUGERIDO ---
             print(f"\n  PITCH DE VENTA SUGERIDO (Alta Conversion):")
             gap = "no tienen web" if not mejor['tiene_web'] else "su web es lenta u obsoleta"
             if mejor['gmb']['quejas']:
@@ -942,6 +1016,11 @@ def main():
 
             if mejor['contexto']:
                 print(f"  Contexto: {mejor['contexto'][0][:100]}...")
+            
+            # Sugerencia de outreach
+            if mejor['emails']:
+                print(f"\n  [!] CONTACTO DISPONIBLE: {mejor['emails'][0]}")
+                print(f"  [!] Accion recomendada: Abrir propuesta y enviar mockup visual.")
         else:
             print("  No se encontro ningun prospecto viable en esta busqueda.")
         print(f"{'='*55}")
