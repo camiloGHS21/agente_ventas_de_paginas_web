@@ -7,13 +7,13 @@ install_vendedor() {
     local REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     local CONFIG_DIR="$HOME/.config/opencode"
     local SCRIPTS_DIR="$CONFIG_DIR/scripts"
-    local VERSION="19.0.0"
+    local VERSION="20.0.0"
 
-    echo "🤖 Iniciando instalador profesional Vendedor-IA (v19.0.0)..."
+    echo "🤖 Iniciando instalador profesional Vendedor-IA (v20.0.0)..."
 
     # 1. Preparar entorno
     mkdir -p "$CONFIG_DIR" "$SCRIPTS_DIR"
-    local SKILLS_DIR="$CONFIG_DIR/.agents/skills"
+    local SKILLS_DIR="$HOME/.agents/skills"
     mkdir -p "$SKILLS_DIR/frontend-design"
     mkdir -p "$SKILLS_DIR/gsap"
 

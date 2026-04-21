@@ -2,12 +2,13 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Vendedor {
+    $VERSION = "20.0.0"
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
     $scriptsDir = "$configDir\scripts"
-    $SkillsDir = "$configDir\.agents\skills"
+    $SkillsDir = "$env:USERPROFILE\.agents\skills"
 
-    Write-Host "🤖 Iniciando instalador profesional Vendedor-IA (v19.0.0)..." -ForegroundColor Cyan
+    Write-Host "🤖 Iniciando instalador profesional Vendedor-IA (v20.0.0)..." -ForegroundColor Cyan
 
     # 1. Preparar directorios
     if (-not (Test-Path $scriptsDir)) { New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null }
