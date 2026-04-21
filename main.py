@@ -31,7 +31,7 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "20.0.0"
+VERSION = "21.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
@@ -711,153 +711,118 @@ def deploy_vercel(nombre, html_code, token):
     return None
 
 # ==================================================================
-# MODULO 5: GENERADOR DE PAGINAS (v16.0.0)
+# MODULO 5: GENERADOR DE PAGINAS (v21.0.0)
 # ==================================================================
-def generar_html_propuesta(mejor, lider):
-    """
-    Generador Elite v19.0 (Injection Skill: BOLD AESTHETIC + GSAP).
-    Sigue las guias de .agents/skills/frontend-design para evitar estetica IA generica.
-    """
-    nombre = mejor['nombre']
-    rating = mejor['gmb']['rating'] or "N/A"
-    lider_nombre = lider['nombre']
-    
-    # Inyeccion de BOLD SKILLS (Syne Font + Mesh + Noise + GSAP)
-    html = f"""<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+def detectar_nicho(lead):
+    """Detecta el nicho del lead para ajustar el diseño y contenido."""
+    text = f"{lead['nombre']} {lead.get('resumen', '')}".lower()
+    if any(k in text for k in ["restaurante", "food", "comida", "grill", "café", "bar", "steak", "pizza"]):
+        return "RESTAURANTE"
+    if any(k in text for k in ["gym", "fit", "salud", "body", "sport", "spa", "dentist"]):
+        return "BIENESTAR"
+    return "TECH/GENERAL"
+
+def generar_css_premium(nicho):
+    """Genera Vanilla CSS optimizado por nicho."""
+    if nicho == "RESTAURANTE":
+        return """
+:root { --primary: #eab308; --bg: #0c0a09; --text: #fafaf9; --font-main: 'Playfair Display', serif; --font-body: 'Cormorant Garamond', serif; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 1.2rem; }
+h1, h2 { font-family: var(--font-main); text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); }
+.hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(12,10,9,1)), url('https://source.unsplash.com/featured/?restaurant,food,interior'); background-size: cover; }
+.glass-card { background: rgba(28, 25, 23, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(234, 179, 8, 0.2); padding: 3rem; border-radius: 1rem; }
+"""
+    return """
+:root { --primary: #3b82f6; --bg: #050505; --text: #f8fafc; --font-main: 'Syne', sans-serif; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-main); }
+.hero { min-height: 100vh; padding: 4rem; display: grid; place-items: center; background: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(225,39%,30%,1) 0, transparent 50%); }
+.glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; padding: 4rem; }
+"""
+
+def scaffold_react_project(mejor, lider):
+    """Crea un proyecto React (Vite) profesional para el lead."""
+    nicho = detectar_nicho(mejor)
+    safe_name = "".join(c for c in mejor['nombre'] if c.isalnum()).lower()
+    base_path = os.path.join(PROPUESTAS_DIR, f"{safe_name}_v21")
+    os.makedirs(os.path.join(base_path, "src"), exist_ok=True)
+    os.makedirs(os.path.join(base_path, "public"), exist_ok=True)
+
+    # 1. package.json
+    with open(os.path.join(base_path, "package.json"), "w") as f:
+        json.dump({
+            "name": f"proposal-{safe_name}",
+            "private": True,
+            "version": "0.0.0",
+            "type": "module",
+            "scripts": { "dev": "vite", "build": "vite build" },
+            "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0" },
+            "devDependencies": { "@vitejs/plugin-react": "^4.0.0", "vite": "^4.3.0" }
+        }, f, indent=2)
+
+    # 2. vite.config.js
+    with open(os.path.join(base_path, "vite.config.js"), "w") as f:
+        f.write("import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({ plugins: [react()] });")
+
+    # 3. index.html
+    fonts = "Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;600" if nicho == "RESTAURANTE" else "Syne:wght@400;700;800"
+    with open(os.path.join(base_path, "index.html"), "w") as f:
+        f.write(f"""<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{nombre} | Transformación Digital</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <title>Proposal: {mejor['nombre']}</title>
+    <link href="https://fonts.googleapis.com/css2?family={fonts}&display=swap" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {{ --bg: #050505; --accent: #3b82f6; }}
-        body {{ font-family: 'Syne', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }}
-        
-        /* Skills: Mesh Background & Noise Texture */
-        .mesh-bg {{ 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background-color: hsla(0,0%,0%,1);
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-        }}
-        .noise {{ 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
-            opacity: 0.05; pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }}
-
-        .glass-card {{ background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }}
-        .text-huge {{ font-size: clamp(3rem, 12vw, 8rem); line-height: 0.9; letter-spacing: -0.04em; font-weight: 800; }}
-        .animate-reveal {{ opacity: 0; transform: translateY(40px); }}
-    </style>
 </head>
-<body class="selection:bg-blue-500/30">
-    <div class="mesh-bg"></div>
-    <div class="noise"></div>
+<body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+</html>""")
 
-    <!-- Header Asimetrico -->
-    <header class="p-8 flex justify-between items-start max-w-[1600px] mx-auto">
-        <div class="text-2xl font-bold tracking-tighter mix-blend-difference">VISION.<span class="text-blue-500">AI</span></div>
-        <div class="glass-card px-6 py-3 text-xs font-bold tracking-widest uppercase opacity-60">Lead ID: SG-{hash(mejor['nombre']) % 10000}</div>
-    </header>
+    # 4. src/main.jsx
+    with open(os.path.join(base_path, "src/main.jsx"), "w") as f:
+        f.write("import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App.jsx';\nimport './index.css';\n\nReactDOM.createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);")
 
-    <main class="max-w-[1600px] mx-auto px-8 py-12">
-        <!-- Hero Section: Bold Typography -->
-        <section class="mb-32">
-            <p class="animate-reveal text-blue-400 font-bold mb-6 tracking-widest uppercase">Diagnóstico Pro para {mejor.get('ciudad', 'su zona')}</p>
-            <h1 class="animate-reveal text-huge mb-12">
-                REDEFINA <br> <span class="text-slate-500 italic uppercase">{mejor['nombre']}</span>
-            </h1>
-            
-            <div class="grid md:grid-cols-12 gap-12 items-end">
-                <div class="md:col-span-5 animate-reveal">
-                    <p class="text-xl text-slate-400 leading-relaxed mb-10">
-                        Mientras <span class="text-white font-bold tracking-tight">{lider['nombre']}</span> domina con su presencia digital, detectamos que su marca tiene el potencial de superar los ⭐ {lider['rating']} actuales y establecer una nueva hegemonía visual.
-                    </p>
-                    <div class="flex gap-6">
-                        <button class="px-10 py-5 bg-blue-600 rounded-full font-bold hover:scale-105 transition active:scale-95 shadow-2xl shadow-blue-500/20">
-                            INICIAR TRANSFORMACIÓN
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Mockup Skill Implementation -->
-                <div class="md:col-span-7 animate-reveal relative">
-                    <div class="glass-card overflow-hidden aspect-video relative group">
-                        <img src="{obtener_mockup_visual(mejor.get('url_web')) or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426'}" 
-                             class="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition duration-1000" alt="UI Mockup">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                        <div class="absolute bottom-10 left-10">
-                            <span class="text-xs font-bold bg-blue-600 px-3 py-1 rounded mb-2 inline-block">MOCKUP v19.0</span>
-                            <h2 class="text-3xl font-bold">Un Nuevo Estándar Visual</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    # 5. src/index.css
+    with open(os.path.join(base_path, "src/index.css"), "w") as f:
+        f.write(generar_css_premium(nicho))
 
-        <!-- Staggered Stats (GSAP Reference) -->
-        <section class="grid md:grid-cols-4 gap-4">
-            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between">
-                <div class="text-blue-500 font-bold uppercase tracking-widest text-[10px]">Visibilidad Local</div>
-                <div class="text-5xl font-bold font-mono">+{ '310%' if not mejor['tiene_web'] else '120%' }</div>
-            </div>
-            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between md:mt-12">
-                <div class="text-emerald-500 font-bold uppercase tracking-widest text-[10px]">Conversión Directa</div>
-                <div class="text-5xl font-bold font-mono">Active</div>
-            </div>
-            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between">
-                <div class="text-purple-500 font-bold uppercase tracking-widest text-[10px]">Benchmark</div>
-                <div class="text-5xl font-bold font-mono">TOP 3</div>
-            </div>
-            <div class="stat-card animate-reveal glass-card p-10 h-64 flex flex-col justify-between md:mt-12">
-                <div class="text-orange-500 font-bold uppercase tracking-widest text-[10px]">Auditoría Digital</div>
-                <div class="text-5xl font-bold font-mono italic">PRO</div>
-            </div>
-        </section>
-    </main>
+    # 6. src/App.jsx
+    img_url = "https://source.unsplash.com/featured/?restaurant,food" if nicho == "RESTAURANTE" else "https://source.unsplash.com/featured/?tech,minimal"
+    with open(os.path.join(base_path, "src/App.jsx"), "w") as f:
+        f.write(f"""
+import React, {{ useEffect }} from 'react';
 
-    <footer class="p-20 text-center opacity-30 text-[10px] tracking-[0.5em] uppercase border-t border-white/5 mt-32">
-        Derechos Reservados © 2026 - Powered by Find_Create_Web Elite Engine
-    </footer>
+function App() {{
+  useEffect(() => {{
+    gsap.from(".animate-in", {{ opacity: 0, y: 50, duration: 1.5, stagger: 0.3, ease: "expo.out" }});
+  }}, []);
 
-    <!-- GSAP Skills Implementation -->
-    <script>
-        window.addEventListener('load', () => {{
-            const tl = gsap.timeline({{ defaults: {{ ease: "power4.out", duration: 2 }} }});
-            
-            tl.to(".animate-reveal", {{ 
-                opacity: 1, 
-                y: 0, 
-                stagger: 0.15,
-                ease: "expo.out"
-            }}, 0.5)
-            .from(".stat-card", {{
-                scaleX: 0.5,
-                opacity: 0,
-                duration: 1.5,
-                stagger: 0.1,
-                ease: "elastic.out(1, 0.8)"
-            }}, "-=1");
-        }});
-    </script>
-</body>
-</html>"""
-    return html
+  return (
+    <div className="hero">
+      <div className="glass-card animate-in">
+        <h1 className="animate-in">{mejor['nombre']}</h1>
+        <p className="animate-in">Elevando el estándar de {mejor.get('ciudad', 'su ciudad')}</p>
+        <div className="comparison animate-in">
+          <p>Mientas <strong>{lider['nombre']}</strong> domina con ⭐ {lider['rating']}, ustedes están a un paso de liderar.</p>
+        </div>
+        <img src="{img_url}" style={{{{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: '1rem', marginTop: '2rem' }}}} />
+        <button style={{{{ marginTop: '2rem', padding: '1rem 2rem', background: 'var(--primary)', color: '#000', border: 'none', borderRadius: '2rem', fontWeight: 'bold', cursor: 'pointer' }}}}>
+          Activar Proyecto React
+        </button>
+      </div>
+    </div>
+  );
+}}
 
-def guardar_propuesta(nombre, html):
-    """Guarda la propuesta HTML en la carpeta lead_sites."""
-    os.makedirs(PROPUESTAS_DIR, exist_ok=True)
-    slug = re.sub(r'[^a-z0-9]', '', nombre.lower().replace(' ', '-'))
-    path = os.path.join(PROPUESTAS_DIR, f"{slug}.html")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(html)
-    return path
+export default App;
+""")
+    return base_path
+
+def guardar_propuesta(base_path):
+    """Notifica al usuario sobre el nuevo proyecto React."""
+    print(f"\n[PROYECTO REACT GENERADO]")
+    print(f"Ruta: {base_path}")
+    print(f"Instrucciones: cd {base_path} && npm install && npm run dev")
+    return base_path
 
 # ==================================================================
 # MODULO 6: EVALUADOR DE LEADS
@@ -1076,10 +1041,10 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # --- GENERACION DE PROPUESTA ACTIVA (v16.0) ---
-            html_propuesta = generar_html_propuesta(mejor, lider)
-            path_propuesta = guardar_propuesta(mejor['nombre'], html_propuesta)
-            print(f"  [+] PROPUESTA GENERADA: {path_propuesta}")
+            # Generar Activos Dinamicos (v21.0: React + Niche Aware)
+            print(f"\n🎨 Creando propuesta React Pro para {mejor['nombre']}...")
+            base_path = scaffold_react_project(mejor, lider)
+            guardar_propuesta(base_path)
             
             # --- PITCH DE VENTA SUGERIDO ---
             print(f"\n  PITCH DE VENTA SUGERIDO (Alta Conversion):")
