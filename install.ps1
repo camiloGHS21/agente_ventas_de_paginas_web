@@ -14,6 +14,7 @@ function Install-Vendedor {
     if (-not (Test-Path $scriptsDir)) { New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null }
     if (!(Test-Path "$SkillsDir\frontend-design")) { New-Item -Path "$SkillsDir\frontend-design" -ItemType Directory -Force }
     if (!(Test-Path "$SkillsDir\gsap")) { New-Item -Path "$SkillsDir\gsap" -ItemType Directory -Force }
+    if (!(Test-Path "$SkillsDir\refero-design")) { New-Item -Path "$SkillsDir\refero-design" -ItemType Directory -Force }
 
     # 2. Descarga Directa
     Write-Host "â¬‡ï¸  Descargando componentes..." -ForegroundColor Yellow
@@ -27,6 +28,7 @@ function Install-Vendedor {
     Invoke-RestMethod -Uri "$REPO_RAW/.agents/skills/frontend-design/SKILL.md" -OutFile "$SkillsDir\frontend-design\SKILL.md"
     Invoke-RestMethod -Uri "$REPO_RAW/.agents/skills/frontend-design/LICENSE.txt" -OutFile "$SkillsDir\frontend-design\LICENSE.txt"
     Invoke-RestMethod -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md" -OutFile "$SkillsDir\gsap\SKILL.md"
+    Invoke-RestMethod -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md" -OutFile "$SkillsDir\refero-design\SKILL.md"
 
     # 3. Dependencias
     Write-Host "📦 Instalando dependencias Python..." -ForegroundColor Yellow
