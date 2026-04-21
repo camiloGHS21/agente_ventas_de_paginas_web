@@ -31,12 +31,15 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "25.0.0"
+VERSION = "26.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
 
-from architect import scaffold_react_project, detectar_nicho
+# ==================================================================
+# MOTOR OSINT SNIPER (v27.5)
+# ==================================================================
+
 
 # Regex compilados para rendimiento
 RE_EMAIL = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
@@ -712,11 +715,11 @@ def deploy_vercel(nombre, html_code, token):
             time.sleep(2)
     return None
 
+
 def guardar_propuesta(base_path):
-    """Notifica al usuario sobre el nuevo proyecto React MULTI-PÁGINA."""
-    print(f"\n[PROYECTO REACT ELITE v25.0 GENERADO]")
+    print(f"\n🚀 [PROPUESTA GENERADA]")
     print(f"Ruta: {base_path}")
-    print(f"Instrucciones: cd {base_path} && npm install && npm run dev")
+    print(f"Comandos: cd {base_path} ; npm i ; npm run dev")
     return base_path
 
 # ==================================================================
@@ -936,11 +939,7 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # Generar Activos Dinamicos (v25.0: Modular Architect)
-            nicho = detectar_nicho(mejor)
-            print(f"\n💎 Aplicando Refero Master Design para {mejor['nombre']} ({nicho})...")
-            base_path = scaffold_react_project(mejor, lider, nicho)
-            guardar_propuesta(base_path)
+            
             
             # --- PITCH DE VENTA SUGERIDO ---
             print(f"\n  PITCH DE VENTA SUGERIDO (Alta Conversion):")
