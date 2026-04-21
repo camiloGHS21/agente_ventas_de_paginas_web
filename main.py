@@ -31,10 +31,55 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "22.0.0"
+VERSION = "23.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
+
+NICHE_CONFIG = {
+    "RESTAURANTE": {
+        "font": "'Playfair Display', serif",
+        "primary": "#eab308",
+        "topic": "restaurant,luxury,food",
+        "tagline": "gastronomía de clase mundial"
+    },
+    "GYM": {
+        "font": "'Oswald', sans-serif",
+        "primary": "#ef4444",
+        "topic": "gym,fitness,workout",
+        "tagline": "rendimiento máximo y fitness"
+    },
+    "SPA": {
+        "font": "'Montserrat', sans-serif",
+        "primary": "#f472b6",
+        "topic": "spa,wellness,beauty",
+        "tagline": "bienestar y cuidado personal"
+    },
+    "TECH": {
+        "font": "'Syne', sans-serif",
+        "primary": "#3b82f6",
+        "topic": "tech,digital,modern",
+        "tagline": "innovación y transformación digital"
+    },
+    "PROFESSIONAL": {
+        "font": "'EB Garamond', serif",
+        "primary": "#1e3a8a",
+        "topic": "office,corporate,law",
+        "tagline": "excelencia y consultoría estratégica"
+    },
+    "MEDICAL": {
+        "font": "'Inter', sans-serif",
+        "primary": "#0ea5e9",
+        "topic": "medical,health,clinic",
+        "tagline": "salud y atención especializada"
+    },
+    "GENERAL": {
+        "font": "'Inter', sans-serif",
+        "primary": "#a8a29e",
+        "topic": "business,modern",
+        "tagline": "excelencia y liderazgo empresarial"
+    }
+}
 
 # Regex compilados para rendimiento
 RE_EMAIL = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
@@ -718,12 +763,23 @@ def detectar_nicho(lead):
     text = f"{lead['nombre']} {lead.get('resumen', '')}".lower()
     if any(k in text for k in ["restaurante", "food", "comida", "grill", "café", "bar", "steak", "pizza", "sushi"]):
         return "RESTAURANTE"
+    if any(k in text for k in ["gym", "fit", "salud", "body", "sport", "yoga", "crossfit", "box"]):
+        return "GYM"
+    if any(k in text for k in ["spa", "beauty", "salón", "uñas", "estética", "masaje"]):
+        return "SPA"
+    if any(k in text for k in ["tech", "software", "digital", "agency", "app", "dev"]):
+        return "TECH"
+    if any(k in text for k in ["abogado", "law", "legal", "consultoría", "asesoría", "contador", "fiscal"]):
+        return "PROFESSIONAL"
+    if any(k in text for k in ["médico", "clínica", "dental", "salud", "hospital", "dentista", "doctor"]):
+        return "MEDICAL"
     return "GENERAL"
 
 def generar_css_premium(nicho):
-    """Genera un framework de CSS Vanilla Responsivo (Home-made)."""
-    fonts = "'Playfair Display', serif" if nicho == "RESTAURANTE" else "'Syne', sans-serif"
-    primary = "#eab308" if nicho == "RESTAURANTE" else "#3b82f6"
+    """Genera un framework de CSS Vanilla Responsivo basado en el nicho."""
+    conf = NICHE_CONFIG.get(nicho, NICHE_CONFIG["GENERAL"])
+    fonts = conf["font"]
+    primary = conf["primary"]
     
     return f"""
 :root {{
@@ -763,8 +819,9 @@ nav a:hover {{ color: var(--primary); }}
 def scaffold_react_project(mejor, lider):
     """Crea un proyecto React (Vite) MULTI-PÁGINA Profesional."""
     nicho = detectar_nicho(mejor)
+    conf = NICHE_CONFIG.get(nicho, NICHE_CONFIG["GENERAL"])
     safe_name = "".join(c for c in mejor['nombre'] if c.isalnum()).lower()
-    base_path = os.path.join(PROPUESTAS_DIR, f"{safe_name}_v22")
+    base_path = os.path.join(PROPUESTAS_DIR, f"{safe_name}_v23")
     
     # Estructura de Folders
     for d in ["src/components", "src/pages", "src/styles", "public"]:
@@ -775,7 +832,7 @@ def scaffold_react_project(mejor, lider):
         json.dump({
             "name": f"proposal-{safe_name}",
             "private": True,
-            "version": "22.0.0",
+            "version": "23.0.0",
             "type": "module",
             "scripts": { "dev": "vite", "build": "vite build" },
             "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0", "react-router-dom": "^6.11.0" },
@@ -802,7 +859,7 @@ export default function Navbar() {{
         <Link to="/" style={{{{ fontSize: '1.5rem', textTransform: 'uppercase', fontWeight: 800 }}}}>{mejor['nombre']}</Link>
         <div className="links">
           <Link to="/">Inicio</Link>
-          <Link to="/menu">{'Menú' if nicho == 'RESTAURANTE' else 'Servicios'}</Link>
+          <Link to="/menu">{ 'Menú' if nicho == 'RESTAURANTE' else 'Servicios' }</Link>
           <Link to="/gallery">Galería</Link>
           <Link to="/about">Nosotros</Link>
         </div>
@@ -815,7 +872,7 @@ export default function Navbar() {{
         f.write(navbar_content)
 
     # 5. Pages Construction
-    img_hero = "https://source.unsplash.com/featured/?restaurant,luxury,food" if nicho == "RESTAURANTE" else "https://source.unsplash.com/featured/?tech,modern"
+    img_hero = f"https://source.unsplash.com/featured/?{conf['topic']}"
     
     # 5.1 Home.jsx
     home_content = f"""
@@ -829,9 +886,9 @@ export default function Home() {{
   return (
     <div className="hero">
       <div className="container hero-content">
-        <p style={{{{ color: 'var(--primary)', fontWeight: 'bold' }}}}>Propuesta v22.0</p>
+        <p style={{{{ color: 'var(--primary)', fontWeight: 'bold' }}}}>Elite Proposal v23.0</p>
         <h1>REDEFINIENDO <br/> <span style={{{{ color: 'var(--primary)' }}}}>{mejor['nombre']}</span></h1>
-        <p>Convertimos {'el sabor' if nicho == 'RESTAURANTE' else 'la visión'} de {mejor.get('ciudad', 'su zona')} en una experiencia digital épica.</p>
+        <p>Expertos en {conf['tagline']} en {mejor.get('ciudad', 'su zona')}.</p>
         <img src="{img_hero}" style={{{{ marginTop: '4rem', width: '100%', maxHeight: '600px', objectFit: 'cover' }}}} />
       </div>
     </div>
@@ -855,12 +912,12 @@ export default function Menu() {{
   return (
     <div style={{{{ padding: '10rem 0' }}}}>
       <div className="container">
-        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>{'La Selección' if nicho == 'RESTAURANTE' else 'Servicios Elite'}</h2>
+        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>{ 'Nuestra Carta' if nicho == 'RESTAURANTE' else 'Servicios Especializados' }</h2>
         <div className="grid-auto">
           {{items.map(i => (
             <div key={{i}} className="card">
-              <h3 style={{{{ color: 'var(--primary)', marginBottom: '1rem' }}}}>{'Plato' if nicho == 'RESTAURANTE' else 'Solución'} #{{i}}</h3>
-              <p>Diseño exclusivo orientado a la conversión y la experiencia de usuario.</p>
+              <h3 style={{{{ color: 'var(--primary)', marginBottom: '1rem' }}}}>{'Opción' if nicho == 'RESTAURANTE' else 'Solución'} #{{i}}</h3>
+              <p>Calidad técnica y estética superior para garantizar el éxito de {mejor['nombre']}.</p>
             </div>
           ))}}
         </div>
@@ -873,22 +930,21 @@ export default function Menu() {{
         f.write(menu_content)
 
     # 5.3 Gallery.jsx
-    gal_topic = "food,dinner" if nicho == "RESTAURANTE" else "office,design"
     gallery_content = f"""
 import React, {{ useEffect }} from 'react';
 
 export default function Gallery() {{
   useEffect(() => {{
-    gsap.from(".gallery-img", {{ opacity: 0, y: 30, duration: 1, stagger: 0.2 }});
+    gsap.from(".gallery-img", {{ opacity: 0, scale: 0.5, duration: 1, stagger: 0.2 }});
   }}, []);
 
   return (
     <div style={{{{ padding: '10rem 0' }}}}>
       <div className="container">
-        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>Galería Visual</h2>
+        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>Curaduría Visual</h2>
         <div className="grid-auto">
           {{[1,2,3,4,5,6].map(i => (
-            <img key={{i}} className="gallery-img" src={{{{`https://source.unsplash.com/featured/?{gal_topic}&v=${{i}}`}}}} />
+            <img key={{i}} className="gallery-img" src={{{{`https://source.unsplash.com/featured/?{conf['topic']}&v=${{i}}`}}}} />
           ))}}
         </div>
       </div>
@@ -1167,8 +1223,9 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # Generar Activos Dinamicos (v22.0: React Multi-Page + Responsive)
-            print(f"\n🎨 Creando propuesta Multi-Page React Pro para {mejor['nombre']}...")
+            # Generar Activos Dinamicos (v23.0: Universal Niche Engine)
+            nicho = detectar_nicho(mejor)
+            print(f"\n🎨 Creando propuesta Multi-Page React Pro para {mejor['nombre']} ({nicho})...")
             base_path = scaffold_react_project(mejor, lider)
             guardar_propuesta(base_path)
             
