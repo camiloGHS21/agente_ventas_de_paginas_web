@@ -1,0 +1,17 @@
+{
+  "agent": {
+    "vendedor-ia": {
+      "description": "Agente autónomo que prospecta en OSM, genera Landing Pages y envía correos fríos.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.5,
+      "prompt": "{file:./prompt_vendedor.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    }
+  }
+}
