@@ -38,7 +38,8 @@ powershell -ExecutionPolicy Bypass -Command "Invoke-RestMethod https://raw.githu
 ### Linux / macOS / Amazon EC2
 Ejecuta esto en tu terminal:
 ```bash
-curl -sSL https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.sh | bash
+curl -H "Cache-Control: no-cache" -sSL https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master/install.sh | bash
+
 ```
 
 ---

@@ -31,10 +31,9 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "13.0.0"
+VERSION = "15.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
-RESULTADOS_DIR = "resultados_osint"
 
 # Regex compilados para rendimiento
 RE_EMAIL = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
@@ -947,13 +946,8 @@ def main():
             print("  No se encontro ningun prospecto viable en esta busqueda.")
         print(f"{'='*55}")
 
-        # Guardar resumen JSON
-        os.makedirs(RESULTADOS_DIR, exist_ok=True)
-        ts = datetime.now().strftime('%Y%m%d_%H%M')
-        resumen_path = os.path.join(RESULTADOS_DIR, f"resumen_{args.ciudad}_{ts}.json")
-        with open(resumen_path, "w", encoding="utf-8") as f:
-            json.dump(leads_calificados, f, indent=2, ensure_ascii=False)
-        print(f"\n[+] Resumen completo guardado en: {resumen_path}")
+        # Fin del proceso
+        print(f"\n[+] Analisis finalizado exitosamente.")
 
     except KeyboardInterrupt:
         print("\n[!] Agente detenido por el usuario.")
