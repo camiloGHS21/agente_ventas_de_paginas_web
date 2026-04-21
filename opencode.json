@@ -14,11 +14,24 @@
       }
     },
     "dev": {
-      "description": "Agente Master Architect para creación de apps innovadoras y validación de ideas.",
+      "description": "Agente Constructor Master. Implementa planes, hace commits y debuguea bugs.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.3,
+      "prompt": "{file:./prompt_dev.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "devPlan": {
+      "description": "Agente Planificador. Valida ideas con OSINT y crea planes ultra-comprimidos.",
       "mode": "primary",
       "model": "gemini-3.0-flash-preview",
       "temperature": 0.5,
-      "prompt": "{file:./prompt_dev.txt}",
+      "prompt": "{file:./prompt_devPlan.txt}",
       "permissions": {
         "edit": "ask",
         "bash": {
