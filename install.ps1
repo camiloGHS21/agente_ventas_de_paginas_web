@@ -1,8 +1,9 @@
-# Universal Agent Installer (v31.0.0)
+# Universal Agent Installer (v32.0.0)
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "31.0.0"
+    $VERSION = "32.0.0"
+    $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
     $scriptsDir = "$configDir\scripts"
@@ -20,19 +21,19 @@ function Install-Agents {
     Write-Host "[>] Descargando componentes desde el repositorio..." -ForegroundColor Yellow
     
     # 2.1 AGENTES (Scripts)
-    Invoke-WebRequest -Uri "$REPO_RAW/main.py" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/dev.py" -OutFile "$scriptsDir\dev.py" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/main.py?v=$RAND" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/dev.py?v=$RAND" -OutFile "$scriptsDir\dev.py" -UseBasicParsing
     
     # 2.2 CONFIG Y PROMPTS
-    Invoke-WebRequest -Uri "$REPO_RAW/opencode.json" -OutFile "$configDir\opencode.json" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/prompt_vendedor.txt" -OutFile "$configDir\prompt_vendedor.txt" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/prompt_dev.txt" -OutFile "$configDir\prompt_dev.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/opencode.json?v=$RAND" -OutFile "$configDir\opencode.json" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_vendedor.txt?v=$RAND" -OutFile "$configDir\prompt_vendedor.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_dev.txt?v=$RAND" -OutFile "$configDir\prompt_dev.txt" -UseBasicParsing
 
     # 2.3 SKILLS
     Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
-    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md" -OutFile "$SkillsDir\gsap\SKILL.md" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md" -OutFile "$SkillsDir\refero-design\SKILL.md" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman/SKILL.md" -OutFile "$SkillsDir\caveman\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md?v=$RAND" -OutFile "$SkillsDir\gsap\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md?v=$RAND" -OutFile "$SkillsDir\refero-design\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman/SKILL.md?v=$RAND" -OutFile "$SkillsDir\caveman\SKILL.md" -UseBasicParsing
 
     # 3. Dependencias
     Write-Host "[>] Verificando dependencias Python..." -ForegroundColor Yellow
