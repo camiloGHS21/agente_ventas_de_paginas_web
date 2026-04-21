@@ -31,7 +31,7 @@ except ImportError:
 # ==================================================================
 # CONFIGURACION
 # ==================================================================
-VERSION = "21.0.0"
+VERSION = "22.0.0"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 PROPUESTAS_DIR = "lead_sites"
@@ -716,110 +716,236 @@ def deploy_vercel(nombre, html_code, token):
 def detectar_nicho(lead):
     """Detecta el nicho del lead para ajustar el diseño y contenido."""
     text = f"{lead['nombre']} {lead.get('resumen', '')}".lower()
-    if any(k in text for k in ["restaurante", "food", "comida", "grill", "café", "bar", "steak", "pizza"]):
+    if any(k in text for k in ["restaurante", "food", "comida", "grill", "café", "bar", "steak", "pizza", "sushi"]):
         return "RESTAURANTE"
-    if any(k in text for k in ["gym", "fit", "salud", "body", "sport", "spa", "dentist"]):
-        return "BIENESTAR"
-    return "TECH/GENERAL"
+    return "GENERAL"
 
 def generar_css_premium(nicho):
-    """Genera Vanilla CSS optimizado por nicho."""
-    if nicho == "RESTAURANTE":
-        return """
-:root { --primary: #eab308; --bg: #0c0a09; --text: #fafaf9; --font-main: 'Playfair Display', serif; --font-body: 'Cormorant Garamond', serif; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 1.2rem; }
-h1, h2 { font-family: var(--font-main); text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); }
-.hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(12,10,9,1)), url('https://source.unsplash.com/featured/?restaurant,food,interior'); background-size: cover; }
-.glass-card { background: rgba(28, 25, 23, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(234, 179, 8, 0.2); padding: 3rem; border-radius: 1rem; }
-"""
-    return """
-:root { --primary: #3b82f6; --bg: #050505; --text: #f8fafc; --font-main: 'Syne', sans-serif; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-main); }
-.hero { min-height: 100vh; padding: 4rem; display: grid; place-items: center; background: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(225,39%,30%,1) 0, transparent 50%); }
-.glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2rem; padding: 4rem; }
+    """Genera un framework de CSS Vanilla Responsivo (Home-made)."""
+    fonts = "'Playfair Display', serif" if nicho == "RESTAURANTE" else "'Syne', sans-serif"
+    primary = "#eab308" if nicho == "RESTAURANTE" else "#3b82f6"
+    
+    return f"""
+:root {{
+  --primary: {primary}; --bg: #0c0a09; --text: #fafaf9; --card-bg: rgba(28, 25, 23, 0.7);
+  --font-main: {fonts}; --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}}
+* {{ margin: 0; padding: 0; box-sizing: border-box; }}
+body {{ background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }}
+h1, h2, h3 {{ font-family: var(--font-main); text-transform: uppercase; letter-spacing: 0.1em; }}
+img {{ max-width: 100%; height: auto; border-radius: 1rem; }}
+.container {{ max-width: 1200px; margin: 0 auto; padding: 0 2rem; }}
+
+/* NAVIGATION */
+nav {{ position: fixed; top: 0; width: 100%; padding: 1.5rem 0; z-index: 1000; backdrop-filter: blur(10px); background: rgba(0,0,0,0.5); }}
+nav .content {{ display: flex; justify-content: space-between; align-items: center; }}
+nav .links {{ display: flex; gap: 2rem; }}
+nav a {{ color: var(--text); text-decoration: none; font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; transition: var(--transition); }}
+nav a:hover {{ color: var(--primary); }}
+
+/* HERO SYSTEM - RESPONSIVE */
+.hero {{ min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; }}
+.hero h1 {{ font-size: clamp(2.5rem, 8vw, 6rem); line-height: 1; margin-bottom: 2rem; }}
+.hero p {{ font-size: 1.2rem; opacity: 0.7; max-width: 600px; }}
+
+/* GRID SYSTEM */
+.grid-auto {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; padding: 4rem 0; }}
+.card {{ background: var(--card-bg); padding: 2rem; border-radius: 1.5rem; border: 1px solid rgba(255,255,255,0.05); transition: var(--transition); text-align: center; }}
+.card:hover {{ transform: translateY(-10px); border-color: var(--primary); }}
+
+@media (max-width: 768px) {{
+  nav .links {{ display: none; }} 
+  .hero {{ text-align: left; align-items: flex-start; }}
+  .container {{ padding: 0 1.5rem; }}
+}}
 """
 
 def scaffold_react_project(mejor, lider):
-    """Crea un proyecto React (Vite) profesional para el lead."""
+    """Crea un proyecto React (Vite) MULTI-PÁGINA Profesional."""
     nicho = detectar_nicho(mejor)
     safe_name = "".join(c for c in mejor['nombre'] if c.isalnum()).lower()
-    base_path = os.path.join(PROPUESTAS_DIR, f"{safe_name}_v21")
-    os.makedirs(os.path.join(base_path, "src"), exist_ok=True)
-    os.makedirs(os.path.join(base_path, "public"), exist_ok=True)
+    base_path = os.path.join(PROPUESTAS_DIR, f"{safe_name}_v22")
+    
+    # Estructura de Folders
+    for d in ["src/components", "src/pages", "src/styles", "public"]:
+        os.makedirs(os.path.join(base_path, d), exist_ok=True)
 
-    # 1. package.json
+    # 1. package.json con Routing
     with open(os.path.join(base_path, "package.json"), "w") as f:
         json.dump({
             "name": f"proposal-{safe_name}",
             "private": True,
-            "version": "0.0.0",
+            "version": "22.0.0",
             "type": "module",
             "scripts": { "dev": "vite", "build": "vite build" },
-            "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0" },
+            "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0", "react-router-dom": "^6.11.0" },
             "devDependencies": { "@vitejs/plugin-react": "^4.0.0", "vite": "^4.3.0" }
         }, f, indent=2)
 
-    # 2. vite.config.js
-    with open(os.path.join(base_path, "vite.config.js"), "w") as f:
-        f.write("import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({ plugins: [react()] });")
-
-    # 3. index.html
-    fonts = "Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;600" if nicho == "RESTAURANTE" else "Syne:wght@400;700;800"
-    with open(os.path.join(base_path, "index.html"), "w") as f:
-        f.write(f"""<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <title>Proposal: {mejor['nombre']}</title>
-    <link href="https://fonts.googleapis.com/css2?family={fonts}&display=swap" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-</head>
-<body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
-</html>""")
-
-    # 4. src/main.jsx
+    # 2. Main.jsx con Router
     with open(os.path.join(base_path, "src/main.jsx"), "w") as f:
-        f.write("import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App.jsx';\nimport './index.css';\n\nReactDOM.createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>);")
+        f.write("import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { BrowserRouter } from 'react-router-dom';\nimport App from './App.jsx';\nimport './styles/index.css';\n\nReactDOM.createRoot(document.getElementById('root')).render(<React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode>);")
 
-    # 5. src/index.css
-    with open(os.path.join(base_path, "src/index.css"), "w") as f:
+    # 3. index.css (Home-made framework)
+    with open(os.path.join(base_path, "src/styles/index.css"), "w") as f:
         f.write(generar_css_premium(nicho))
 
-    # 6. src/App.jsx
-    img_url = "https://source.unsplash.com/featured/?restaurant,food" if nicho == "RESTAURANTE" else "https://source.unsplash.com/featured/?tech,minimal"
-    with open(os.path.join(base_path, "src/App.jsx"), "w") as f:
-        f.write(f"""
+    # 4. Navbar.jsx
+    navbar_content = f"""
+import React from 'react';
+import {{ Link }} from 'react-router-dom';
+
+export default function Navbar() {{
+  return (
+    <nav>
+      <div className="container content">
+        <Link to="/" style={{{{ fontSize: '1.5rem', textTransform: 'uppercase', fontWeight: 800 }}}}>{mejor['nombre']}</Link>
+        <div className="links">
+          <Link to="/">Inicio</Link>
+          <Link to="/menu">{'Menú' if nicho == 'RESTAURANTE' else 'Servicios'}</Link>
+          <Link to="/gallery">Galería</Link>
+          <Link to="/about">Nosotros</Link>
+        </div>
+      </div>
+    </nav>
+  );
+}}
+"""
+    with open(os.path.join(base_path, "src/components/Navbar.jsx"), "w") as f:
+        f.write(navbar_content)
+
+    # 5. Pages Construction
+    img_hero = "https://source.unsplash.com/featured/?restaurant,luxury,food" if nicho == "RESTAURANTE" else "https://source.unsplash.com/featured/?tech,modern"
+    
+    # 5.1 Home.jsx
+    home_content = f"""
 import React, {{ useEffect }} from 'react';
 
-function App() {{
+export default function Home() {{
   useEffect(() => {{
-    gsap.from(".animate-in", {{ opacity: 0, y: 50, duration: 1.5, stagger: 0.3, ease: "expo.out" }});
+    gsap.from(".hero-content *", {{ opacity: 0, y: 100, duration: 1.5, stagger: 0.2, ease: "expo.out" }});
   }}, []);
 
   return (
     <div className="hero">
-      <div className="glass-card animate-in">
-        <h1 className="animate-in">{mejor['nombre']}</h1>
-        <p className="animate-in">Elevando el estándar de {mejor.get('ciudad', 'su ciudad')}</p>
-        <div className="comparison animate-in">
-          <p>Mientas <strong>{lider['nombre']}</strong> domina con ⭐ {lider['rating']}, ustedes están a un paso de liderar.</p>
-        </div>
-        <img src="{img_url}" style={{{{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: '1rem', marginTop: '2rem' }}}} />
-        <button style={{{{ marginTop: '2rem', padding: '1rem 2rem', background: 'var(--primary)', color: '#000', border: 'none', borderRadius: '2rem', fontWeight: 'bold', cursor: 'pointer' }}}}>
-          Activar Proyecto React
-        </button>
+      <div className="container hero-content">
+        <p style={{{{ color: 'var(--primary)', fontWeight: 'bold' }}}}>Propuesta v22.0</p>
+        <h1>REDEFINIENDO <br/> <span style={{{{ color: 'var(--primary)' }}}}>{mejor['nombre']}</span></h1>
+        <p>Convertimos {'el sabor' if nicho == 'RESTAURANTE' else 'la visión'} de {mejor.get('ciudad', 'su zona')} en una experiencia digital épica.</p>
+        <img src="{img_hero}" style={{{{ marginTop: '4rem', width: '100%', maxHeight: '600px', objectFit: 'cover' }}}} />
       </div>
     </div>
   );
 }}
+"""
+    with open(os.path.join(base_path, "src/pages/Home.jsx"), "w") as f:
+        f.write(home_content)
 
+    # 5.2 Menu.jsx
+    menu_content = f"""
+import React, {{ useEffect }} from 'react';
+
+export default function Menu() {{
+  useEffect(() => {{
+    gsap.from(".card", {{ opacity: 0, scale: 0.8, duration: 1, stagger: 0.1, ease: "back.out(1.7)" }});
+  }}, []);
+
+  const items = [1, 2, 3, 4, 5, 6];
+
+  return (
+    <div style={{{{ padding: '10rem 0' }}}}>
+      <div className="container">
+        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>{'La Selección' if nicho == 'RESTAURANTE' else 'Servicios Elite'}</h2>
+        <div className="grid-auto">
+          {{items.map(i => (
+            <div key={{i}} className="card">
+              <h3 style={{{{ color: 'var(--primary)', marginBottom: '1rem' }}}}>{'Plato' if nicho == 'RESTAURANTE' else 'Solución'} #{{i}}</h3>
+              <p>Diseño exclusivo orientado a la conversión y la experiencia de usuario.</p>
+            </div>
+          ))}}
+        </div>
+      </div>
+    </div>
+  );
+}}
+"""
+    with open(os.path.join(base_path, "src/pages/Menu.jsx"), "w") as f:
+        f.write(menu_content)
+
+    # 5.3 Gallery.jsx
+    gal_topic = "food,dinner" if nicho == "RESTAURANTE" else "office,design"
+    gallery_content = f"""
+import React, {{ useEffect }} from 'react';
+
+export default function Gallery() {{
+  useEffect(() => {{
+    gsap.from(".gallery-img", {{ opacity: 0, y: 30, duration: 1, stagger: 0.2 }});
+  }}, []);
+
+  return (
+    <div style={{{{ padding: '10rem 0' }}}}>
+      <div className="container">
+        <h2 style={{{{ textAlign: 'center', marginBottom: '4rem' }}}}>Galería Visual</h2>
+        <div className="grid-auto">
+          {{[1,2,3,4,5,6].map(i => (
+            <img key={{i}} className="gallery-img" src={{{{`https://source.unsplash.com/featured/?{gal_topic}&v=${{i}}`}}}} />
+          ))}}
+        </div>
+      </div>
+    </div>
+  );
+}}
+"""
+    with open(os.path.join(base_path, "src/pages/Gallery.jsx"), "w") as f:
+        f.write(gallery_content)
+
+    # 6. App.jsx Wrapper
+    app_content = """
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Menu from './pages/Menu';
+import Gallery from './pages/Gallery';
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/about" element={<Home />} />
+      </Routes>
+    </>
+  );
+}
 export default App;
-""")
+"""
+    with open(os.path.join(base_path, "src/App.jsx"), "w") as f:
+        f.write(app_content)
+
+    # 7. Extras
+    with open(os.path.join(base_path, "vite.config.js"), "w") as f:
+        f.write("import { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()] });")
+    
+    with open(os.path.join(base_path, "index.html"), "w") as f:
+        f.write(f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" /><title>Proposal: {mejor['nombre']}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&family=Syne:wght@800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+</html>""")
+
     return base_path
 
 def guardar_propuesta(base_path):
-    """Notifica al usuario sobre el nuevo proyecto React."""
-    print(f"\n[PROYECTO REACT GENERADO]")
+    """Notifica al usuario sobre el nuevo proyecto React MULTI-PÁGINA."""
+    print(f"\n[PROYECTO REACT ELITE v22.0 GENERADO]")
     print(f"Ruta: {base_path}")
     print(f"Instrucciones: cd {base_path} && npm install && npm run dev")
     return base_path
@@ -1041,8 +1167,8 @@ def main():
             if mockup:
                 print(f"  [*] Mockup 'Antes': {mockup}")
             
-            # Generar Activos Dinamicos (v21.0: React + Niche Aware)
-            print(f"\n🎨 Creando propuesta React Pro para {mejor['nombre']}...")
+            # Generar Activos Dinamicos (v22.0: React Multi-Page + Responsive)
+            print(f"\n🎨 Creando propuesta Multi-Page React Pro para {mejor['nombre']}...")
             base_path = scaffold_react_project(mejor, lider)
             guardar_propuesta(base_path)
             
