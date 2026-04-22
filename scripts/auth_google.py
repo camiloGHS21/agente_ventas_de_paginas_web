@@ -8,6 +8,9 @@ from googleapiclient.discovery import build
 import base64
 from email.mime.text import MIMEText
 
+# Relajar la validación de scopes para evitar errores por 'openid'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
 # Configuración
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config_auth.json")
 TOKEN_PATH = os.path.join(os.path.dirname(__file__), "..", "token.json")
