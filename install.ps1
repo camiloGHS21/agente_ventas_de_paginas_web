@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "48.0.0"
+    $VERSION = "52.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -21,7 +21,7 @@ function Install-Agents {
     Write-Host "[>] Descargando componentes desde el repositorio..." -ForegroundColor Yellow
     
     # 2.1 AGENTES (Scripts)
-    Invoke-WebRequest -Uri "$REPO_RAW/main.py?v=$RAND" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/vendedor.py?v=$RAND" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/dev.py?v=$RAND" -OutFile "$scriptsDir\dev.py" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/scripts/auth_google.py?v=$RAND" -OutFile "$scriptsDir\auth_google.py" -UseBasicParsing
     
@@ -41,7 +41,10 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devMoney.txt?v=$RAND" -OutFile "$configDir\prompt_devMoney.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devBack.txt?v=$RAND" -OutFile "$configDir\prompt_devBack.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -OutFile "$configDir\prompt_devDocs.txt" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/config_auth.json?v=$RAND" -OutFile "$configDir\config_auth.json" -UseBasicParsing
+    
+    if (-not (Test-Path "$configDir\config_auth.json")) {
+        Invoke-WebRequest -Uri "$REPO_RAW/config_auth.json?v=$RAND" -OutFile "$configDir\config_auth.json" -UseBasicParsing
+    }
 
     # 2.3 SKILLS
     Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow

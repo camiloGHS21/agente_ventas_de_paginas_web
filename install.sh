@@ -4,7 +4,7 @@
 set -e
 
 install_agents() {
-    local VERSION="50.0.0"
+    local VERSION="52.0.0"
     local RAND=$RANDOM
     local REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     local CONFIG_DIR="$HOME/.config/opencode"
@@ -21,7 +21,7 @@ install_agents() {
     echo "[>] Descargando componentes desde el repositorio..."
     
     # 2.1 AGENTES (Scripts)
-    curl -fsSL "$REPO_RAW/main.py?v=$RAND" -o "$SCRIPTS_DIR/vendedor.py"
+    curl -fsSL "$REPO_RAW/vendedor.py?v=$RAND" -o "$SCRIPTS_DIR/vendedor.py"
     curl -fsSL "$REPO_RAW/dev.py?v=$RAND" -o "$SCRIPTS_DIR/dev.py"
     curl -fsSL "$REPO_RAW/scripts/auth_google.py?v=$RAND" -o "$SCRIPTS_DIR/auth_google.py"
     
@@ -41,7 +41,10 @@ install_agents() {
     curl -fsSL "$REPO_RAW/prompt_devMoney.txt?v=$RAND" -o "$CONFIG_DIR/prompt_devMoney.txt"
     curl -fsSL "$REPO_RAW/prompt_devBack.txt?v=$RAND" -o "$CONFIG_DIR/prompt_devBack.txt"
     curl -fsSL "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -o "$CONFIG_DIR/prompt_devDocs.txt"
-    curl -fsSL "$REPO_RAW/config_auth.json?v=$RAND" -o "$CONFIG_DIR/config_auth.json"
+    
+    if [ ! -f "$CONFIG_DIR/config_auth.json" ]; then
+        curl -fsSL "$REPO_RAW/config_auth.json?v=$RAND" -o "$CONFIG_DIR/config_auth.json"
+    fi
 
     # 2.3 SKILLS
     echo "[>] Instalando Skills (Caveman, Refero, GSAP)..."
