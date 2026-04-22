@@ -1,8 +1,8 @@
-# Universal Agent Installer (v32.0.0)
+# Universal Agent Installer (v45.0.0)
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "44.0.0"
+    $VERSION = "45.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -35,6 +35,9 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devRefactor.txt?v=$RAND" -OutFile "$configDir\prompt_devRefactor.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devCopy.txt?v=$RAND" -OutFile "$configDir\prompt_devCopy.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_ceo.txt?v=$RAND" -OutFile "$configDir\prompt_ceo.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devBack.txt?v=$RAND" -OutFile "$configDir\prompt_devBack.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -OutFile "$configDir\prompt_devDocs.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devSocial.txt?v=$RAND" -OutFile "$configDir\prompt_devSocial.txt" -UseBasicParsing
 
     # 2.3 SKILLS
     Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
@@ -55,6 +58,9 @@ function Install-Agents {
     Write-Host "Agente DevRefactor: opencode --agent devRefactor"
     Write-Host "Agente DevCopy: opencode --agent devCopy"
     Write-Host "Agente CEO: opencode --agent ceo"
+    Write-Host "Agente DevBack: opencode --agent devBack"
+    Write-Host "Agente DevDocs: opencode --agent devDocs"
+    Write-Host "Agente DevSocial: opencode --agent devSocial"
     Write-Host "Agente Dev: opencode --agent dev"
 }
 

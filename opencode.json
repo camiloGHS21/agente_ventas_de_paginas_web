@@ -116,6 +116,45 @@
           "*": "ask"
         }
       }
+    },
+    "devBack": {
+      "description": "Agente Backend y DB. Experto en Supabase, Firebase, Node.js y arquitectura de datos.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.2,
+      "prompt": "{file:./prompt_devBack.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "devDocs": {
+      "description": "Agente de Documentación. Crea READMEs, API docs y manuales técnicos impecables.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.5,
+      "prompt": "{file:./prompt_devDocs.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "devSocial": {
+      "description": "Agente Growth Hacker. Crea contenido para redes sociales y anuncia lanzamientos.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.8,
+      "prompt": "{file:./prompt_devSocial.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
