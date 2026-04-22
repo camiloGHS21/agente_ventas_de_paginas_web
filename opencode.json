@@ -51,6 +51,32 @@
           "*": "ask"
         }
       }
+    },
+    "devOps": {
+      "description": "Agente de Despliegue. Experto en Vercel, Netlify, Docker y automatización CI/CD.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.2,
+      "prompt": "{file:./prompt_devOps.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "devTest": {
+      "description": "Agente Auditor de Calidad. Especialista en robustez, tests unitarios y E2E.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.2,
+      "prompt": "{file:./prompt_devTest.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
