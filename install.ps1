@@ -39,6 +39,8 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devSocial.txt?v=$RAND" -OutFile "$configDir\prompt_devSocial.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devAI.txt?v=$RAND" -OutFile "$configDir\prompt_devAI.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devMoney.txt?v=$RAND" -OutFile "$configDir\prompt_devMoney.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devBack.txt?v=$RAND" -OutFile "$configDir\prompt_devBack.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -OutFile "$configDir\prompt_devDocs.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/config_auth.json?v=$RAND" -OutFile "$configDir\config_auth.json" -UseBasicParsing
 
     # 2.3 SKILLS
