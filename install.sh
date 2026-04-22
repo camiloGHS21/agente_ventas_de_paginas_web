@@ -4,7 +4,7 @@
 set -e
 
 install_agents() {
-    local VERSION="54.0.0"
+    local VERSION="55.0.0"
     local RAND=$RANDOM
     local REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     local CONFIG_DIR="$HOME/.config/opencode"
@@ -27,7 +27,9 @@ install_agents() {
     curl -fsSL "$REPO_RAW/scripts/auth_google.py?v=$RAND" -o "$SCRIPTS_DIR/auth_google.py"
     
     # 2.2 CONFIG Y PROMPTS
-    curl -fsSL "$REPO_RAW/opencode.json?v=$RAND" -o "$CONFIG_DIR/opencode.json"
+    if [ ! -f "$CONFIG_DIR/opencode.json" ]; then
+        curl -fsSL "$REPO_RAW/opencode.json?v=$RAND" -o "$CONFIG_DIR/opencode.json"
+    fi
     curl -fsSL "$REPO_RAW/prompt_vendedor.txt?v=$RAND" -o "$CONFIG_DIR/prompt_vendedor.txt"
     curl -fsSL "$REPO_RAW/prompt_dev.txt?v=$RAND" -o "$CONFIG_DIR/prompt_dev.txt"
     curl -fsSL "$REPO_RAW/prompt_devPlan.txt?v=$RAND" -o "$CONFIG_DIR/prompt_devPlan.txt"

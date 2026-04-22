@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "54.0.0"
+    $VERSION = "55.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -30,7 +30,9 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/scripts/auth_google.py?v=$RAND" -OutFile "$scriptsDir\auth_google.py" -UseBasicParsing
     
     # 2.2 CONFIG Y PROMPTS
-    Invoke-WebRequest -Uri "$REPO_RAW/opencode.json?v=$RAND" -OutFile "$configDir\opencode.json" -UseBasicParsing
+    if (-not (Test-Path "$configDir\opencode.json")) {
+        Invoke-WebRequest -Uri "$REPO_RAW/opencode.json?v=$RAND" -OutFile "$configDir\opencode.json" -UseBasicParsing
+    }
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_vendedor.txt?v=$RAND" -OutFile "$configDir\prompt_vendedor.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_dev.txt?v=$RAND" -OutFile "$configDir\prompt_dev.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devPlan.txt?v=$RAND" -OutFile "$configDir\prompt_devPlan.txt" -UseBasicParsing
