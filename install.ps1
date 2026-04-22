@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "52.0.0"
+    $VERSION = "53.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -40,17 +40,24 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devAI.txt?v=$RAND" -OutFile "$configDir\prompt_devAI.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devMoney.txt?v=$RAND" -OutFile "$configDir\prompt_devMoney.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devBack.txt?v=$RAND" -OutFile "$configDir\prompt_devBack.txt" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -OutFile "$configDir\prompt_devDocs.txt" -UseBasicParsing
     
     if (-not (Test-Path "$configDir\config_auth.json")) {
-        Invoke-WebRequest -Uri "$REPO_RAW/config_auth.json?v=$RAND" -OutFile "$configDir\config_auth.json" -UseBasicParsing
+        $defaultConfig = @{
+            google = @{
+                client_id = "TU_CLIENT_ID"
+                client_secret = "TU_CLIENT_SECRET"
+            }
+            meta = @{
+                app_id = "TU_APP_ID"
+                app_secret = "TU_APP_SECRET"
+            }
+        }
+        $defaultConfig | ConvertTo-Json | Set-Content "$configDir\config_auth.json" -Encoding UTF8
     }
 
     # 2.3 SKILLS
-    Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
-    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md?v=$RAND" -OutFile "$SkillsDir\gsap\SKILL.md" -UseBasicParsing
+    Write-Host "[>] Instalando Skills (Refero)..." -ForegroundColor Yellow
     Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md?v=$RAND" -OutFile "$SkillsDir\refero-design\SKILL.md" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman/SKILL.md?v=$RAND" -OutFile "$SkillsDir\caveman\SKILL.md" -UseBasicParsing
 
     # 3. Dependencias
     Write-Host "[>] Verificando dependencias Python..." -ForegroundColor Yellow

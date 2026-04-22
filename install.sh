@@ -4,7 +4,7 @@
 set -e
 
 install_agents() {
-    local VERSION="52.0.0"
+    local VERSION="53.0.0"
     local RAND=$RANDOM
     local REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     local CONFIG_DIR="$HOME/.config/opencode"
@@ -43,14 +43,23 @@ install_agents() {
     curl -fsSL "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -o "$CONFIG_DIR/prompt_devDocs.txt"
     
     if [ ! -f "$CONFIG_DIR/config_auth.json" ]; then
-        curl -fsSL "$REPO_RAW/config_auth.json?v=$RAND" -o "$CONFIG_DIR/config_auth.json"
+        cat << 'EOF' > "$CONFIG_DIR/config_auth.json"
+{
+  "google": {
+    "client_id": "TU_CLIENT_ID",
+    "client_secret": "TU_CLIENT_SECRET"
+  },
+  "meta": {
+    "app_id": "TU_APP_ID",
+    "app_secret": "TU_APP_SECRET"
+  }
+}
+EOF
     fi
 
     # 2.3 SKILLS
-    echo "[>] Instalando Skills (Caveman, Refero, GSAP)..."
-    curl -fsSL "$REPO_RAW/.agents/skills/gsap/SKILL.md?v=$RAND" -o "$SKILLS_DIR/gsap/SKILL.md"
+    echo "[>] Instalando Skills (Refero)..."
     curl -fsSL "$REPO_RAW/.agents/skills/refero-design/SKILL.md?v=$RAND" -o "$SKILLS_DIR/refero-design/SKILL.md"
-    curl -fsSL "$REPO_RAW/.agents/skills/caveman/SKILL.md?v=$RAND" -o "$SKILLS_DIR/caveman/SKILL.md"
 
     # 3. Dependencias
     echo "[>] Verificando dependencias Python..."
