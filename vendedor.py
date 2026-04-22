@@ -689,6 +689,35 @@ def abrir_correo_gmail(email_destino, nombre_negocio, url_demo):
         print(f"[-] Error abriendo navegador: {e}")
         return False
 
+def enviar_correo_via_api(email_destino, nombre_negocio, url_demo):
+    """Llama al script auth_google.py para enviar el correo sin intervencion humana."""
+    import subprocess
+    import os
+    
+    script_path = os.path.join(os.path.dirname(__file__), "scripts", "auth_google.py")
+    if not os.path.exists(script_path):
+        print(f"[-] Error: Script de automatizacion no encontrado en {script_path}")
+        return False
+        
+    subject = f"He creado una web profesional GRATIS para {nombre_negocio}"
+    link = url_demo if url_demo else "(demo adjunta localmente)"
+    body = (
+        f"Hola equipo de {nombre_negocio},\n\n"
+        f"Encontre que su negocio tiene excelente potencial pero no dispone de una pagina web profesional.\n\n"
+        f"Me tome la libertad de disenar una propuesta visual personalizada:\n"
+        f"{link}\n\n"
+        f"Si les gusta, se las entrego lista y publicada por solo $40 USD (pago unico).\n\n"
+        f"Saludos cordiales,\nConsultor Web AI"
+    )
+    
+    cmd = ["python", script_path, "--send_email", email_destino, subject, body]
+    try:
+        subprocess.run(cmd, check=True)
+        return True
+    except Exception as e:
+        print(f"[-] Error en envio automatizado: {e}")
+        return False
+
 # ==================================================================
 # MODULO 4: DEPLOY A VERCEL (OPCIONAL)
 # ==================================================================
@@ -775,7 +804,9 @@ def main():
     parser.add_argument('--deploy_only', action='store_true',
                         help='Solo despliega un HTML ya generado')
     parser.add_argument('--html_file', type=str, help='Archivo HTML para deploy_only')
-    parser.add_argument('--limite', type=int, default=100, help='Maximo de negocios a buscar (default: 100)')
+    parser.add_argument("--limite", type=int, default=10, help="Maximo de negocios a buscar")
+    parser.add_argument("--automata", action="store_true", help="Enviar correo automatico via API (requiere login previo)")
+    parser.add_argument("--vercel-token", type=str, help="Token de Vercel para auto-deploy")
     parser.add_argument('--version', action='version', version=f'Vendedor-IA v{VERSION}')
 
     args, _ = parser.parse_known_args()
@@ -803,7 +834,10 @@ def main():
             print(f"[+] Archivo local listo: {url_final}")
         em_match = RE_EMAIL.search(html_code)
         if em_match:
-            abrir_correo_gmail(em_match.group(0), "Lead", url_final)
+            if args.automata:
+                enviar_correo_via_api(em_match.group(0), "Lead", url_final)
+            else:
+                abrir_correo_gmail(em_match.group(0), "Lead", url_final)
         return
 
     # --- MODO INTERACTIVO ---
@@ -961,7 +995,11 @@ def main():
             # Sugerencia de outreach
             if mejor['emails']:
                 print(f"\n  [!] CONTACTO DISPONIBLE: {mejor['emails'][0]}")
-                print(f"  [!] Accion recomendada: Abrir propuesta y enviar mockup visual.")
+                if args.automata:
+                    print(f"  [!] Accion recomendada: Enviando correo automatico...")
+                    enviar_correo_via_api(mejor['emails'][0], mejor['nombre'], mockup)
+                else:
+                    print(f"  [!] Accion recomendada: Abrir propuesta y enviar mockup visual.")
         else:
             print("  No se encontro ningun prospecto viable en esta busqueda.")
         print(f"{'='*55}")
