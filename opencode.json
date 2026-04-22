@@ -90,6 +90,32 @@
           "*": "ask"
         }
       }
+    },
+    "devCopy": {
+      "description": "Agente Copywriter. Especialista en escritura persuasiva, SEO y tono Refero.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.8,
+      "prompt": "{file:./prompt_devCopy.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "ceo": {
+      "description": "Agente Orquestador. Coordina a todo el equipo para ejecutar proyectos complejos.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.5,
+      "prompt": "{file:./prompt_ceo.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
