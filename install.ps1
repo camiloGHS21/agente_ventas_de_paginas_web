@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "41.0.0"
+    $VERSION = "42.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -32,6 +32,7 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDesign.txt?v=$RAND" -OutFile "$configDir\prompt_devDesign.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devOps.txt?v=$RAND" -OutFile "$configDir\prompt_devOps.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devTest.txt?v=$RAND" -OutFile "$configDir\prompt_devTest.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devRefactor.txt?v=$RAND" -OutFile "$configDir\prompt_devRefactor.txt" -UseBasicParsing
 
     # 2.3 SKILLS
     Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
@@ -49,6 +50,7 @@ function Install-Agents {
     Write-Host "Agente DevDesign: opencode --agent devDesign"
     Write-Host "Agente DevOps: opencode --agent devOps"
     Write-Host "Agente DevTest: opencode --agent devTest"
+    Write-Host "Agente DevRefactor: opencode --agent devRefactor"
     Write-Host "Agente Dev: opencode --agent dev"
 }
 

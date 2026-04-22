@@ -77,6 +77,19 @@
           "*": "ask"
         }
       }
+    },
+    "devRefactor": {
+      "description": "Agente Refactorizador. Especialista en Clean Code, patrones de diseño y optimización React.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.3,
+      "prompt": "{file:./prompt_devRefactor.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
