@@ -1,7 +1,7 @@
 {
   "agent": {
-    "find_create_web": {
-      "description": "Agente autonomo que prospecta en OSM, genera Landing Pages y envía correos fríos.",
+    "vendedor": {
+      "description": "Agente Prospector y Vendedor. Busca leads en OSM, crea especificaciones .md y vende por Gmail.",
       "mode": "primary",
       "model": "gemini-3.0-flash-preview",
       "temperature": 0.5,

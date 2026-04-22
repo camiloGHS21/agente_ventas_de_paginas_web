@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "42.0.0"
+    $VERSION = "43.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
