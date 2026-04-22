@@ -38,6 +38,19 @@
           "*": "ask"
         }
       }
+    },
+    "devDesign": {
+      "description": "Agente Director de Arte. Maestro de Refero Design, GSAP y visuales premium.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.7,
+      "prompt": "{file:./prompt_devDesign.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }
