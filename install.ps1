@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "46.0.0"
+    $VERSION = "47.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -23,6 +23,7 @@ function Install-Agents {
     # 2.1 AGENTES (Scripts)
     Invoke-WebRequest -Uri "$REPO_RAW/main.py?v=$RAND" -OutFile "$scriptsDir\vendedor.py" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/dev.py?v=$RAND" -OutFile "$scriptsDir\dev.py" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/scripts/auth_google.py?v=$RAND" -OutFile "$scriptsDir\auth_google.py" -UseBasicParsing
     
     # 2.2 CONFIG Y PROMPTS
     Invoke-WebRequest -Uri "$REPO_RAW/opencode.json?v=$RAND" -OutFile "$configDir\opencode.json" -UseBasicParsing
@@ -48,7 +49,7 @@ function Install-Agents {
 
     # 3. Dependencias
     Write-Host "[>] Verificando dependencias Python..." -ForegroundColor Yellow
-    pip install -q duckduckgo_search requests 2>$null
+    pip install -q duckduckgo_search requests google-auth-oauthlib google-auth-httplib2 google-api-python-client 2>$null
 
     Write-Host "`n[DONE] Instalacion Exitosa v$VERSION" -ForegroundColor Green
     Write-Host "Agente Vendedor: opencode --agent vendedor"
