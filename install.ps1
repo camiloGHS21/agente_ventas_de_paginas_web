@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "53.0.0"
+    $VERSION = "54.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -12,10 +12,14 @@ function Install-Agents {
     Write-Host "[*] Iniciando instalador Universal (v$VERSION)..." -ForegroundColor Cyan
 
     # 1. Preparar directorios
-    $dirs = @($scriptsDir, "$SkillsDir\gsap", "$SkillsDir\refero-design", "$SkillsDir\caveman")
-    foreach ($dir in $dirs) {
-        if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
-    }
+    New-Item -ItemType Directory -Force -Path $configDir | Out-Null
+    New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\gsap" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\refero-design" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\frontend-design" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\caveman-commit" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\caveman-compress" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$SkillsDir\caveman-review" | Out-Null
 
     # 2. Descarga de componentes
     Write-Host "[>] Descargando componentes desde el repositorio..." -ForegroundColor Yellow
@@ -56,8 +60,13 @@ function Install-Agents {
     }
 
     # 2.3 SKILLS
-    Write-Host "[>] Instalando Skills (Refero)..." -ForegroundColor Yellow
+    Write-Host "[>] Instalando Skills (Caveman, GSAP, Refero, Frontend)..." -ForegroundColor Yellow
     Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/refero-design/SKILL.md?v=$RAND" -OutFile "$SkillsDir\refero-design\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/gsap/SKILL.md?v=$RAND" -OutFile "$SkillsDir\gsap\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/frontend-design/SKILL.md?v=$RAND" -OutFile "$SkillsDir\frontend-design\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman-commit/SKILL.md?v=$RAND" -OutFile "$SkillsDir\caveman-commit\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman-compress/SKILL.md?v=$RAND" -OutFile "$SkillsDir\caveman-compress\SKILL.md" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/.agents/skills/caveman-review/SKILL.md?v=$RAND" -OutFile "$SkillsDir\caveman-review\SKILL.md" -UseBasicParsing
 
     # 3. Dependencias
     Write-Host "[>] Verificando dependencias Python..." -ForegroundColor Yellow

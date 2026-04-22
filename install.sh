@@ -4,7 +4,7 @@
 set -e
 
 install_agents() {
-    local VERSION="53.0.0"
+    local VERSION="54.0.0"
     local RAND=$RANDOM
     local REPO_RAW="https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     local CONFIG_DIR="$HOME/.config/opencode"
@@ -15,7 +15,8 @@ install_agents() {
 
     # 1. Preparar directorios
     mkdir -p "$CONFIG_DIR" "$SCRIPTS_DIR"
-    mkdir -p "$SKILLS_DIR/gsap" "$SKILLS_DIR/refero-design" "$SKILLS_DIR/caveman"
+    mkdir -p "$SKILLS_DIR/gsap" "$SKILLS_DIR/refero-design" "$SKILLS_DIR/frontend-design"
+    mkdir -p "$SKILLS_DIR/caveman-commit" "$SKILLS_DIR/caveman-compress" "$SKILLS_DIR/caveman-review"
 
     # 2. Descarga de componentes
     echo "[>] Descargando componentes desde el repositorio..."
@@ -58,8 +59,13 @@ EOF
     fi
 
     # 2.3 SKILLS
-    echo "[>] Instalando Skills (Refero)..."
+    echo "[>] Instalando Skills (Caveman, GSAP, Refero, Frontend)..."
     curl -fsSL "$REPO_RAW/.agents/skills/refero-design/SKILL.md?v=$RAND" -o "$SKILLS_DIR/refero-design/SKILL.md"
+    curl -fsSL "$REPO_RAW/.agents/skills/gsap/SKILL.md?v=$RAND" -o "$SKILLS_DIR/gsap/SKILL.md"
+    curl -fsSL "$REPO_RAW/.agents/skills/frontend-design/SKILL.md?v=$RAND" -o "$SKILLS_DIR/frontend-design/SKILL.md"
+    curl -fsSL "$REPO_RAW/.agents/skills/caveman-commit/SKILL.md?v=$RAND" -o "$SKILLS_DIR/caveman-commit/SKILL.md"
+    curl -fsSL "$REPO_RAW/.agents/skills/caveman-compress/SKILL.md?v=$RAND" -o "$SKILLS_DIR/caveman-compress/SKILL.md"
+    curl -fsSL "$REPO_RAW/.agents/skills/caveman-review/SKILL.md?v=$RAND" -o "$SKILLS_DIR/caveman-review/SKILL.md"
 
     # 3. Dependencias
     echo "[>] Verificando dependencias Python..."
