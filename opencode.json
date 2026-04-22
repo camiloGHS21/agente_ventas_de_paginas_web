@@ -155,6 +155,32 @@
           "*": "ask"
         }
       }
+    },
+    "devAI": {
+      "description": "Agente Especialista en IA. Integra RAG, modelos de lenguaje y agentes en las apps.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.3,
+      "prompt": "{file:./prompt_devAI.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
+    },
+    "devMoney": {
+      "description": "Agente Financiero y Pagos. Especialista en Stripe, suscripciones y monetización.",
+      "mode": "primary",
+      "model": "gemini-3.0-flash-preview",
+      "temperature": 0.2,
+      "prompt": "{file:./prompt_devMoney.txt}",
+      "permissions": {
+        "edit": "ask",
+        "bash": {
+          "*": "ask"
+        }
+      }
     }
   }
 }

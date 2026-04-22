@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 function Install-Agents {
-    $VERSION = "45.0.0"
+    $VERSION = "46.0.0"
     $RAND = Get-Random
     $REPO_RAW = "https://raw.githubusercontent.com/camiloGHS21/agente_ventas_de_paginas_web/master"
     $configDir = "$env:USERPROFILE\.config\opencode"
@@ -35,9 +35,10 @@ function Install-Agents {
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devRefactor.txt?v=$RAND" -OutFile "$configDir\prompt_devRefactor.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devCopy.txt?v=$RAND" -OutFile "$configDir\prompt_devCopy.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_ceo.txt?v=$RAND" -OutFile "$configDir\prompt_ceo.txt" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devBack.txt?v=$RAND" -OutFile "$configDir\prompt_devBack.txt" -UseBasicParsing
-    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devDocs.txt?v=$RAND" -OutFile "$configDir\prompt_devDocs.txt" -UseBasicParsing
     Invoke-WebRequest -Uri "$REPO_RAW/prompt_devSocial.txt?v=$RAND" -OutFile "$configDir\prompt_devSocial.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devAI.txt?v=$RAND" -OutFile "$configDir\prompt_devAI.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/prompt_devMoney.txt?v=$RAND" -OutFile "$configDir\prompt_devMoney.txt" -UseBasicParsing
+    Invoke-WebRequest -Uri "$REPO_RAW/config_auth.json?v=$RAND" -OutFile "$configDir\config_auth.json" -UseBasicParsing
 
     # 2.3 SKILLS
     Write-Host "[>] Instalando Skills (Caveman, Refero, GSAP)..." -ForegroundColor Yellow
@@ -61,6 +62,8 @@ function Install-Agents {
     Write-Host "Agente DevBack: opencode --agent devBack"
     Write-Host "Agente DevDocs: opencode --agent devDocs"
     Write-Host "Agente DevSocial: opencode --agent devSocial"
+    Write-Host "Agente DevAI: opencode --agent devAI"
+    Write-Host "Agente DevMoney: opencode --agent devMoney"
     Write-Host "Agente Dev: opencode --agent dev"
 }
 
